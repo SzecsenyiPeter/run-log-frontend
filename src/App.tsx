@@ -1,27 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import './App.css';
-import { Button } from 'semantic-ui-react'
+import { RunForm } from "./components/run-form";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Button>Add run</Button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+          <div className="App">
+              <Switch>
+                  <Route component={ RunForm } exact path="/" />
+              </Switch>
+          </div>
+      </Router>
   );
 }
 
