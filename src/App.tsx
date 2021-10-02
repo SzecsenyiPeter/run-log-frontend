@@ -24,7 +24,7 @@ const App: React.FC = () => {
           </Menu.Item>
         </Container>
       </Menu>
-      <Container>
+      <Container style={{ paddingTop: '4em' }}>
         <Switch>
           <Route component={RunForm} exact path="/add" />
           <Route component={AllRunList} exact path="/list" />

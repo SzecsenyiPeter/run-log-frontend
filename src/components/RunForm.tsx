@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Dropdown, Form, Input,
+  Button, Dropdown, Form, Header, Input,
 } from 'semantic-ui-react';
 
 const distanceMeasurementOptions = [
@@ -9,17 +9,34 @@ const distanceMeasurementOptions = [
 ];
 const RunForm: React.FC = () => (
   <Form>
-    <h1>Add new run</h1>
+    <Header as="h1">Add new run</Header>
     <Form.Field>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label>Duration</label>
-      <Input placeholder="Duration" />
+      <label htmlFor="title">
+        Title
+      </label>
+      <Input id="title" placeholder="Title of the run" />
     </Form.Field>
     <Form.Field>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label>Distance</label>
-      <Input label={<Dropdown defaultValue="KM" options={distanceMeasurementOptions} />} labelPosition="right" placeholder="Distance" />
+      <label htmlFor="description">
+        Description
+      </label>
+      <Form.TextArea id="description" placeholder="Write something about the run" />
     </Form.Field>
+    <Form.Group widths="equal">
+      <Form.Field>
+        <label htmlFor="duration">
+          Duration
+        </label>
+        <Input id="duration" placeholder="Duration" />
+      </Form.Field>
+      <Form.Field>
+        <label htmlFor="distance">
+          Distance
+        </label>
+        <Input id="distance" label={<Dropdown defaultValue="KM" options={distanceMeasurementOptions} />} labelPosition="right" placeholder="Distance" />
+      </Form.Field>
+    </Form.Group>
+
     <Button type="submit">Submit</Button>
   </Form>
 );
