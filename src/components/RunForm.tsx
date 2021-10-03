@@ -27,7 +27,17 @@ const RunForm: React.FC = () => (
         <label htmlFor="duration">
           Duration
         </label>
-        <Input id="duration" placeholder="Duration" />
+        <Form.Group>
+          <Form.Field>
+            <Input id="duration" label={{ basic: true, content: 'hr' }} labelPosition="right" />
+          </Form.Field>
+          <Form.Field>
+            <Input label={{ basic: true, content: 'm' }} labelPosition="right" />
+          </Form.Field>
+          <Form.Field>
+            <Input label={{ basic: true, content: 's' }} labelPosition="right" />
+          </Form.Field>
+        </Form.Group>
       </Form.Field>
       <Form.Field>
         <label htmlFor="distance">
@@ -36,8 +46,7 @@ const RunForm: React.FC = () => (
         <Input id="distance" label={<Dropdown defaultValue="KM" options={distanceMeasurementOptions} />} labelPosition="right" placeholder="Distance" />
       </Form.Field>
     </Form.Group>
-
-    <Button type="submit">Submit</Button>
+    <Button type="submit" primary>Add</Button>
   </Form>
 );
 export default RunForm;
