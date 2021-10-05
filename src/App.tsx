@@ -17,10 +17,10 @@ const App: React.FC = () => {
         <Container>
           <Menu.Item header>Run Log</Menu.Item>
           <Menu.Item as="a">
-            <NavLink to="/list" activeStyle={{ color: 'grey' }}>{ t('allRuns') }</NavLink>
+            <NavLink to="/list" activeStyle={{ color: 'grey' }}>{ t('menu.allRuns') }</NavLink>
           </Menu.Item>
           <Menu.Item as="a">
-            <NavLink to="/add" activeStyle={{ color: 'grey' }}>{ t('addRun') }</NavLink>
+            <NavLink to="/add" activeStyle={{ color: 'grey' }}>{ t('menu.addRun') }</NavLink>
           </Menu.Item>
         </Container>
       </Menu>

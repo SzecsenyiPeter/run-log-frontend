@@ -5,14 +5,48 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
-      addRun: 'Add run',
-      allRuns: 'All runs',
+      menu: {
+        addRun: 'Add run',
+        allRuns: 'All runs',
+      },
+      runForm: {
+        header: 'Add new run',
+        titleLabel: 'Title',
+        titleDescription: 'Title of the run',
+        descriptionLabel: 'Description',
+        descriptionDescription: 'Write something about the run',
+        durationLabel: 'Duration',
+        hourLabel: 'hr',
+        minuteLabel: 'm',
+        secondLabel: 's',
+        distanceLabel: 'Distance',
+        kilometres: 'Kilometres',
+        miles: 'Miles',
+        addButton: 'Add',
+      },
     },
   },
   hu: {
     translation: {
-      addRun: 'Új futás',
-      allRuns: 'Futások',
+      menu: {
+        addRun: 'Új futás',
+        allRuns: 'Futások',
+      },
+      runForm: {
+        header: 'Új futás',
+        titleLabel: 'Cím',
+        titleDescription: 'A futás címe',
+        descriptionLabel: 'Leírás',
+        descriptionDescription: 'Írj valamit a futásodról',
+        durationLabel: 'Idő',
+        hourLabel: 'ó',
+        minuteLabel: 'p',
+        secondLabel: 'mp',
+        distanceLabel: 'Táv',
+        kilometres: 'Kilométer',
+        miles: 'Mérföld',
+        addButton: 'Hozzáad',
+      },
     },
   },
 };

@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import {
   Button, Dropdown, Form, Header, Input,
 } from 'semantic-ui-react';
-
-const distanceMeasurementOptions = [
-  { key: 'KM', text: 'Kilometres', value: 'KM' },
-  { key: 'M', text: 'Miles', value: 'M' },
-];
+import { useTranslation } from 'react-i18next';
 
 const RunForm: React.FC = () => {
+  const { t } = useTranslation();
+
+  const distanceMeasurementOptions = [
+    { key: 'KM', text: t('runForm.kilometres'), value: 'KM' },
+    { key: 'M', text: t('runForm.miles'), value: 'M' },
+  ];
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [hour, setHour] = useState(0);
@@ -37,39 +40,39 @@ const RunForm: React.FC = () => {
   };
   return (
     <Form>
-      <Header as="h0">Add new run</Header>
+      <Header as="h0">{ t('runForm.header') }</Header>
       <Form.Field>
         <label htmlFor="title">
-          Title
+          { t('runForm.titleLabel') }
         </label>
-        <Input id="title" placeholder="Title of the run" value={title} onChange={handleTitleChange} />
+        <Input id="title" placeholder={t('runForm.titleDescription')} value={title} onChange={handleTitleChange} />
       </Form.Field>
       <Form.Field>
         <label htmlFor="description">
-          Description
+          { t('runForm.descriptionLabel') }
         </label>
-        <Form.TextArea id="description" placeholder="Write something about the run" value={description} onChange={handleDescriptionChange} />
+        <Form.TextArea id="description" placeholder={t('runForm.descriptionDescription')} value={description} onChange={handleDescriptionChange} />
       </Form.Field>
       <Form.Group widths="equal">
         <Form.Field>
           <label htmlFor="duration">
-            Duration
+            { t('runForm.durationLabel') }
           </label>
           <Form.Group>
             <Form.Field>
-              <Input id="duration" label={{ basic: true, content: 'hr' }} labelPosition="right" value={hour} onChange={handleHourChange} />
+              <Input id="duration" label={{ basic: true, content: t('runForm.hourLabel') }} labelPosition="right" value={hour} onChange={handleHourChange} />
             </Form.Field>
             <Form.Field>
-              <Input label={{ basic: true, content: 'm' }} labelPosition="right" value={minute} onChange={handleMinuteChange} />
+              <Input label={{ basic: true, content: t('runForm.minuteLabel') }} labelPosition="right" value={minute} onChange={handleMinuteChange} />
             </Form.Field>
             <Form.Field>
-              <Input label={{ basic: true, content: 's' }} labelPosition="right" value={second} onChange={handleSecondChange} />
+              <Input label={{ basic: true, content: t('runForm.secondLabel') }} labelPosition="right" value={second} onChange={handleSecondChange} />
             </Form.Field>
           </Form.Group>
         </Form.Field>
         <Form.Field>
           <label htmlFor="distance">
-            Distance
+            { t('runForm.distanceLabel') }
           </label>
           <Input
             id="distance"
@@ -81,7 +84,7 @@ const RunForm: React.FC = () => {
           />
         </Form.Field>
       </Form.Group>
-      <Button type="submit" primary onClick={onSubmit}>Add</Button>
+      <Button type="submit" primary onClick={onSubmit}>{ t('runForm.addButton') }</Button>
     </Form>
   );
 };
