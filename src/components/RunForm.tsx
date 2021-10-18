@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Form, Header, Input,
+  Button, Form, Header,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -11,17 +11,13 @@ type FormValues = {
   hour: number,
   minute: number,
   second: number,
-  distance: number
+  distance: number,
+  distanceMeasurement: string
 }
 
 const RunForm: React.FC = () => {
   const { t } = useTranslation();
-  const { register, handleSubmit } = useForm<FormValues>();
-
-  const distanceMeasurementOptions = [
-    { key: 'KM', text: t('runForm.kilometres'), value: 'KM' },
-    { key: 'M', text: t('runForm.miles'), value: 'M' },
-  ];
+  const { register, handleSubmit, formState } = useForm<FormValues>({ mode: 'onChange' });
 
   return (
     <Form onSubmit={handleSubmit((data) => { console.log(data); })}>
@@ -45,20 +41,62 @@ const RunForm: React.FC = () => {
           </label>
           <Form.Group>
             <Form.Field>
-              <Input label={{ basic: true, content: t('runForm.minuteLabel') }} labelPosition="right">
+              <div className="ui right labeled input">
                 <input
                   id="duration"
+                  type="number"
                   {...register('hour', {
-                    required: true, min: 0, max: 60, value: 0,
+                    required: true, min: 0, value: 0,
                   })}
                 />
-              </Input>
+                <div className="ui basic label">
+                  { t('runForm.hourLabel') }
+                </div>
+              </div>
+
+              <div className="ui pointing red basic label" style={{ visibility: formState.errors.hour ? 'visible' : 'hidden' }}>
+                { t('runForm.formError') }
+              </div>
             </Form.Field>
             <Form.Field>
-              <Input label={{ basic: true, content: t('runForm.minuteLabel') }} labelPosition="right" {...register('minute')} />
+              <div className="ui right labeled input">
+                <input
+                  id="duration"
+                  type="number"
+                  {...register('minute', {
+                    required: true, min: 0, value: 0,
+                  })}
+                />
+                <div className="ui basic label">
+                  { t('runForm.minuteLabel') }
+                </div>
+              </div>
+              { formState.errors.minute && (
+              <div className="ui pointing red basic label">
+                { t('runForm.formError') }
+              </div>
+              )}
             </Form.Field>
             <Form.Field>
-              <Input label={{ basic: true, content: t('runForm.secondLabel') }} labelPosition="right" {...register('second')} />
+              <div className="ui right labeled input">
+                <input
+                  id="duration"
+                  type="number"
+                  {...register('second', {
+                    required: true, min: 0, value: 0,
+                  })}
+                />
+                <div className="ui basic label">
+                  { t('runForm.hourLabel') }
+                </div>
+              </div>
+              { formState.errors.second && (
+              <div className="ui pointing red basic label">
+                {' '}
+                { t('runForm.formError') }
+                {' '}
+              </div>
+              )}
             </Form.Field>
           </Form.Group>
         </Form.Field>
@@ -66,17 +104,30 @@ const RunForm: React.FC = () => {
           <label htmlFor="distance">
             { t('runForm.distanceLabel') }
           </label>
-          <Input labelPosition="right">
+          <div className="ui right labeled input">
             <input
               id="distance"
+              type="number"
               placeholder="Distance"
-              {...register('distance')}
+              {...register('distance', {
+                required: true, min: 0, value: 0,
+              })}
             />
-            <Form.Dropdown defaultValue="KM" options={distanceMeasurementOptions} />
-          </Input>
+            <select className="ui compact selection dropdown" {...register('distanceMeasurement')}>
+              <option value="km">{ t('runForm.kilometres') }</option>
+              <option selected value="m">{ t('runForm.miles') }</option>
+            </select>
+          </div>
+          { formState.errors.distance && (
+          <div className="ui pointing red basic label">
+            {' '}
+            { t('runForm.formError') }
+            {' '}
+          </div>
+          )}
         </Form.Field>
       </Form.Group>
-      <Button type="submit" primary>{ t('runForm.addButton') }</Button>
+      <Button type="submit" primary disabled={!formState.isValid}>{ t('runForm.addButton')}</Button>
     </Form>
   );
 };
