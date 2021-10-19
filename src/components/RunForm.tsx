@@ -4,6 +4,8 @@ import {
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import { addRun } from '../Api';
+import { Run } from '../domain/Run';
 
 type FormValues = {
   title: string,
@@ -18,9 +20,25 @@ type FormValues = {
 const RunForm: React.FC = () => {
   const { t } = useTranslation();
   const { register, handleSubmit, formState } = useForm<FormValues>({ mode: 'onChange' });
+  const addRunFromForm = (data : FormValues) => {
+    const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second;
+    let distanceInMeters = data.distance;
+    if (data.distanceMeasurement === 'km') {
+      distanceInMeters *= 1000;
+    } else {
+      distanceInMeters *= 1609;
+    }
+    const run: Run = {
+      title: data.title,
+      description: data.description,
+      durationInSeconds,
+      distanceInMeters,
+    };
+    addRun(run);
+  };
 
   return (
-    <Form onSubmit={handleSubmit((data) => { console.log(data); })}>
+    <Form onSubmit={handleSubmit(addRunFromForm)}>
       <Header as="h0">{ t('runForm.header') }</Header>
       <Form.Field>
         <label htmlFor="title">
