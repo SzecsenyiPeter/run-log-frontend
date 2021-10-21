@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-css/semantic.min.css';
 import 'react-router-dom';
 import './i18n';
+import 'react-datepicker';
 
 ReactDOM.render(
   <React.StrictMode>

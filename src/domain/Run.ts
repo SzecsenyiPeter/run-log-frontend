@@ -3,4 +3,5 @@ export interface Run {
     description?: string;
     durationInSeconds: number;
     distanceInMeters: number;
+    date: Date;
 }

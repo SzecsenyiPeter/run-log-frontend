@@ -1,11 +1,14 @@
 import React from 'react';
 import {
-  Button, Form, Header,
+  Button, Form, Header, Transition,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import DatePicker from 'react-datepicker';
 import { addRun } from '../Api';
 import { Run } from '../domain/Run';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 type FormValues = {
   title: string,
@@ -14,12 +17,15 @@ type FormValues = {
   minute: number,
   second: number,
   distance: number,
+  date: Date,
   distanceMeasurement: string
 }
 
 const RunForm: React.FC = () => {
   const { t } = useTranslation();
-  const { register, handleSubmit, formState } = useForm<FormValues>({ mode: 'onChange' });
+  const {
+    register, control, handleSubmit, formState,
+  } = useForm<FormValues>({ mode: 'onChange' });
   const addRunFromForm = (data : FormValues) => {
     const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second;
     let distanceInMeters = data.distance;
@@ -33,6 +39,7 @@ const RunForm: React.FC = () => {
       description: data.description,
       durationInSeconds,
       distanceInMeters,
+      date: data.date,
     };
     addRun(run);
   };
@@ -57,7 +64,7 @@ const RunForm: React.FC = () => {
           <label htmlFor="duration">
             { t('runForm.durationLabel') }
           </label>
-          <Form.Group>
+          <Form.Group widths="equal">
             <Form.Field>
               <div className="ui right labeled input">
                 <input
@@ -71,10 +78,13 @@ const RunForm: React.FC = () => {
                   { t('runForm.hourLabel') }
                 </div>
               </div>
-
-              <div className="ui pointing red basic label" style={{ visibility: formState.errors.hour ? 'visible' : 'hidden' }}>
-                { t('runForm.formError') }
-              </div>
+              <Transition visible={!!formState.errors.hour} animation="slide down" duration={500}>
+                <div className="ui pointing red basic label">
+                  {' '}
+                  { t('runForm.formError') }
+                  {' '}
+                </div>
+              </Transition>
             </Form.Field>
             <Form.Field>
               <div className="ui right labeled input">
@@ -89,11 +99,13 @@ const RunForm: React.FC = () => {
                   { t('runForm.minuteLabel') }
                 </div>
               </div>
-              { formState.errors.minute && (
-              <div className="ui pointing red basic label">
-                { t('runForm.formError') }
-              </div>
-              )}
+              <Transition visible={!!formState.errors.minute} animation="scale" duration={500}>
+                <div className="ui pointing red basic label">
+                  {' '}
+                  { t('runForm.formError') }
+                  {' '}
+                </div>
+              </Transition>
             </Form.Field>
             <Form.Field>
               <div className="ui right labeled input">
@@ -108,16 +120,18 @@ const RunForm: React.FC = () => {
                   { t('runForm.hourLabel') }
                 </div>
               </div>
-              { formState.errors.second && (
-              <div className="ui pointing red basic label">
-                {' '}
-                { t('runForm.formError') }
-                {' '}
-              </div>
-              )}
+              <Transition visible={!!formState.errors.second} animation="scale" duration={500}>
+                <div className="ui pointing red basic label">
+                  {' '}
+                  { t('runForm.formError') }
+                  {' '}
+                </div>
+              </Transition>
             </Form.Field>
           </Form.Group>
         </Form.Field>
+      </Form.Group>
+      <Form.Group widths="equal">
         <Form.Field>
           <label htmlFor="distance">
             { t('runForm.distanceLabel') }
@@ -137,12 +151,40 @@ const RunForm: React.FC = () => {
             </select>
           </div>
           { formState.errors.distance && (
-          <div className="ui pointing red basic label">
-            {' '}
-            { t('runForm.formError') }
-            {' '}
-          </div>
+          <Transition visible={!!formState.errors.distance} animation="scale" duration={500}>
+            <div className="ui pointing red basic label">
+              {' '}
+              { t('runForm.formError') }
+              {' '}
+            </div>
+          </Transition>
           )}
+        </Form.Field>
+        <Form.Field>
+          <label htmlFor="date">
+            { t('runForm.dateLabel') }
+          </label>
+          <Controller
+            control={control}
+            name="date"
+            rules={{ required: true }}
+            defaultValue={new Date()}
+            render={({ field }) => (
+              <DatePicker
+                onChange={(date: Date) => field.onChange(date)}
+                selected={field.value}
+                strictParsing
+                maxDate={new Date()}
+              />
+            )}
+          />
+          <Transition visible={!!formState.errors.date} animation="scale" duration={500}>
+            <div className="ui pointing red basic label">
+              {' '}
+              { t('runForm.dateError') }
+              {' '}
+            </div>
+          </Transition>
         </Form.Field>
       </Form.Group>
       <Button type="submit" primary disabled={!formState.isValid}>{ t('runForm.addButton')}</Button>
