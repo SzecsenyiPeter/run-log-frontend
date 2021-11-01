@@ -27,7 +27,8 @@ const RunForm: React.FC = () => {
     register, control, handleSubmit, formState,
   } = useForm<FormValues>({ mode: 'onChange' });
   const addRunFromForm = (data : FormValues) => {
-    const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second;
+    const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second * 1;
+    console.log(data);
     let distanceInMeters = data.distance;
     if (data.distanceMeasurement === 'km') {
       distanceInMeters *= 1000;
@@ -71,7 +72,7 @@ const RunForm: React.FC = () => {
                   id="duration"
                   type="number"
                   {...register('hour', {
-                    required: true, min: 0, value: 0,
+                    required: true, min: 0,
                   })}
                 />
                 <div className="ui basic label">
@@ -92,7 +93,7 @@ const RunForm: React.FC = () => {
                   id="duration"
                   type="number"
                   {...register('minute', {
-                    required: true, min: 0, value: 0,
+                    required: true, min: 0,
                   })}
                 />
                 <div className="ui basic label">
@@ -113,7 +114,7 @@ const RunForm: React.FC = () => {
                   id="duration"
                   type="number"
                   {...register('second', {
-                    required: true, min: 0, value: 0,
+                    required: true, min: 0,
                   })}
                 />
                 <div className="ui basic label">
@@ -142,7 +143,7 @@ const RunForm: React.FC = () => {
               type="number"
               placeholder="Distance"
               {...register('distance', {
-                required: true, min: 0, value: 0,
+                required: true, min: 0,
               })}
             />
             <select className="ui compact selection dropdown" {...register('distanceMeasurement')}>
