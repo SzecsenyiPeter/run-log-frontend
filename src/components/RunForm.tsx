@@ -28,7 +28,6 @@ const RunForm: React.FC = () => {
   } = useForm<FormValues>({ mode: 'onChange' });
   const addRunFromForm = (data : FormValues) => {
     const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second * 1;
-    console.log(data);
     let distanceInMeters = data.distance;
     if (data.distanceMeasurement === 'km') {
       distanceInMeters *= 1000;

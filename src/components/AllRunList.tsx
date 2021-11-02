@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { DateTime } from 'luxon';
 import { Container, Dropdown } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { getRuns } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 
+const { t } = useTranslation();
 const groupingIntervalOptions = [
   {
     key: GroupingIntervals.WEEK,
-    text: 'Week',
+    text: t('allRunList.weekInterval'),
     value: GroupingIntervals.WEEK,
   },
   {
     key: GroupingIntervals.MONTH,
-    text: 'Month',
+    text: t('allRunList.monthInterval'),
     value: GroupingIntervals.MONTH,
   },
   {
     key: GroupingIntervals.YEAR,
-    text: 'Year',
+    text: t('allRunList.yearInterval'),
     value: GroupingIntervals.YEAR,
   },
 ];
@@ -68,11 +70,11 @@ const AllRunList: React.FC = () => {
       </Container>
       <table className="ui celled table">
         <thead>
-          <th>Date</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Duration</th>
-          <th>Distance</th>
+          <th>{t('allRunList.dateHeader')}</th>
+          <th>{t('allRunList.titleHeader')}</th>
+          <th>{t('allRunList.descriptionHeader')}</th>
+          <th>{t('allRunList.durationHeader')}</th>
+          <th>{t('allRunList.distanceHeader')}</th>
         </thead>
         {getRunGroups().map((runGroup : RunGroup) => (
           <RunGroupTable runGroup={runGroup} groupBy={selectedGrouping} />

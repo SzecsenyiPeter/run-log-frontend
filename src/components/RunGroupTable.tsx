@@ -26,7 +26,7 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
       case GroupingIntervals.MONTH:
         return dateTime.toLocaleString({ month: 'long', year: 'numeric' });
       case GroupingIntervals.WEEK:
-        return `${dateTime.toFormat('yyyy,  W')}.  week`;
+        return `${dateTime.toFormat('yyyy,  W')}.`;
       default:
         return date.toDateString();
     }
