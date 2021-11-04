@@ -1,6 +1,7 @@
 import React from 'react';
 import { DateTime } from 'luxon';
-import { Run } from '../domain/Run';
+import { calculatePaceInUnit, PaceUnit, Run } from '../domain/Run';
+import formatPace from '../utils/PaceDisplay';
 import { RunGroup } from '../domain/RunGroup';
 
 export enum GroupingIntervals {
@@ -38,8 +39,9 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
         <tr>
           <td>{run.date.toLocaleDateString()}</td>
           <td>{run.title}</td>
-          <td>{`${run.durationInSeconds / 60} m`}</td>
-          <td>{`${run.distanceInMeters / 1000} km`}</td>
+          <td>{`${formatPace(run.durationInSeconds / 60)}`}</td>
+          <td>{`${(run.distanceInMeters / 1000).toFixed(2)} km`}</td>
+          <td>{`${formatPace(calculatePaceInUnit(run, PaceUnit.MINUTES_PER_KILOMETER))} m/km`}</td>
         </tr>
       ))}
     </>

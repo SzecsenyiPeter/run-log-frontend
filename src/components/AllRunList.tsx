@@ -6,27 +6,26 @@ import { getRuns } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 
-const { t } = useTranslation();
-const groupingIntervalOptions = [
-  {
-    key: GroupingIntervals.WEEK,
-    text: t('allRunList.weekInterval'),
-    value: GroupingIntervals.WEEK,
-  },
-  {
-    key: GroupingIntervals.MONTH,
-    text: t('allRunList.monthInterval'),
-    value: GroupingIntervals.MONTH,
-  },
-  {
-    key: GroupingIntervals.YEAR,
-    text: t('allRunList.yearInterval'),
-    value: GroupingIntervals.YEAR,
-  },
-];
-
 const AllRunList: React.FC = () => {
+  const { t } = useTranslation();
   const runs = getRuns();
+  const groupingIntervalOptions = [
+    {
+      key: GroupingIntervals.WEEK,
+      text: t('allRunList.weekInterval'),
+      value: GroupingIntervals.WEEK,
+    },
+    {
+      key: GroupingIntervals.MONTH,
+      text: t('allRunList.monthInterval'),
+      value: GroupingIntervals.MONTH,
+    },
+    {
+      key: GroupingIntervals.YEAR,
+      text: t('allRunList.yearInterval'),
+      value: GroupingIntervals.YEAR,
+    },
+  ];
   const [selectedGrouping, setSelectedGrouping] = useState<GroupingIntervals>(
     GroupingIntervals.MONTH,
   );
@@ -72,9 +71,9 @@ const AllRunList: React.FC = () => {
         <thead>
           <th>{t('allRunList.dateHeader')}</th>
           <th>{t('allRunList.titleHeader')}</th>
-          <th>{t('allRunList.descriptionHeader')}</th>
           <th>{t('allRunList.durationHeader')}</th>
           <th>{t('allRunList.distanceHeader')}</th>
+          <th>{t('allRunList.paceHeader')}</th>
         </thead>
         {getRunGroups().map((runGroup : RunGroup) => (
           <RunGroupTable runGroup={runGroup} groupBy={selectedGrouping} />
