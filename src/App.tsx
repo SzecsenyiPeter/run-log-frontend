@@ -5,8 +5,9 @@ import {
 import './App.css';
 import { Container, Menu } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import RunForm from './components/RunForm';
+import AddRunPage from './components/AddRunPage';
 import AllRunList from './components/AllRunList';
+import EditRunPage from './components/EditRunPage';
 
 const App: React.FC = () => {
   const { t } = useTranslation();
@@ -26,8 +27,9 @@ const App: React.FC = () => {
       </Menu>
       <Container style={{ paddingTop: '4em' }}>
         <Switch>
-          <Route component={RunForm} exact path="/add" />
+          <Route component={AddRunPage} exact path="/add" />
           <Route component={AllRunList} exact path="/list" />
+          <Route component={EditRunPage} exact path="/edit" />
           <Route exact path="/">
             <Redirect to="/add" />
           </Route>

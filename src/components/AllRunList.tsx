@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 import { DateTime } from 'luxon';
 import { Container, Dropdown } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { getRuns } from '../Api';
+import { getRuns, deleteRun } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
+import { Run } from '../domain/Run';
 
 const AllRunList: React.FC = () => {
   const { t } = useTranslation();
-  const runs = getRuns();
+  const [runs, setRuns] = useState<Array<Run>>(getRuns());
+  const deleteRunCallback = (id: string) => {
+    deleteRun(id);
+    setRuns(getRuns());
+  };
   const groupingIntervalOptions = [
     {
       key: GroupingIntervals.WEEK,
@@ -63,7 +68,7 @@ const AllRunList: React.FC = () => {
           fluid
           selection
           options={groupingIntervalOptions}
-          value={GroupingIntervals.MONTH}
+          value={selectedGrouping}
           onChange={(event, data) => setSelectedGrouping(data.value as GroupingIntervals)}
         />
       </Container>
@@ -74,9 +79,14 @@ const AllRunList: React.FC = () => {
           <th>{t('allRunList.durationHeader')}</th>
           <th>{t('allRunList.distanceHeader')}</th>
           <th>{t('allRunList.paceHeader')}</th>
+          <th className="one wide">{t('allRunList.actions')}</th>
         </thead>
         {getRunGroups().map((runGroup : RunGroup) => (
-          <RunGroupTable runGroup={runGroup} groupBy={selectedGrouping} />
+          <RunGroupTable
+            runGroup={runGroup}
+            groupBy={selectedGrouping}
+            onDeleteClicked={deleteRunCallback}
+          />
         ))}
       </table>
     </div>

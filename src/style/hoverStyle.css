@@ -1,0 +1,12 @@
+.deleteButton:hover {
+    color: red;
+}
+.deleteButton {
+    -webkit-transition: all 500ms ease;
+}
+.editButton:hover {
+    color: blue;
+}
+.editButton {
+    -webkit-transition: all 500ms ease;
+}

@@ -1,4 +1,5 @@
 export interface Run {
+    id?: string;
     title: string;
     description?: string;
     durationInSeconds: number;

@@ -5,10 +5,18 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
-import { addRun } from '../Api';
 import { Run } from '../domain/Run';
 
 import 'react-datepicker/dist/react-datepicker.css';
+
+interface SubmitCallback {
+  (run : Run) : void;
+}
+
+interface RunFormProps {
+  buttonTitle: string;
+  onSubmitCallback: SubmitCallback;
+}
 
 type FormValues = {
   title: string,
@@ -21,11 +29,26 @@ type FormValues = {
   distanceMeasurement: string
 }
 
-const RunForm: React.FC = () => {
+const defaultValues : FormValues = {
+  description: '',
+  title: '',
+  hour: 1,
+  minute: 1,
+  second: 1,
+  distance: 1,
+  date: new Date(),
+  distanceMeasurement: 'km',
+};
+
+const RunForm: React.FC<RunFormProps> = (props) => {
   const { t } = useTranslation();
+
+  const { buttonTitle, onSubmitCallback } = props;
+
   const {
     register, control, handleSubmit, formState,
-  } = useForm<FormValues>({ mode: 'onChange' });
+  } = useForm<FormValues>({ mode: 'onChange', defaultValues });
+
   const addRunFromForm = (data : FormValues) => {
     const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second * 1;
     let distanceInMeters = data.distance;
@@ -35,13 +58,14 @@ const RunForm: React.FC = () => {
       distanceInMeters *= 1609;
     }
     const run: Run = {
+      id: data.title + data.date.getTime(),
       title: data.title,
       description: data.description,
       durationInSeconds,
       distanceInMeters,
       date: data.date,
     };
-    addRun(run);
+    onSubmitCallback(run);
   };
 
   return (
@@ -71,7 +95,7 @@ const RunForm: React.FC = () => {
                   id="duration"
                   type="number"
                   {...register('hour', {
-                    required: true, min: 0,
+                    required: true, min: 0.01,
                   })}
                 />
                 <div className="ui basic label">
@@ -92,7 +116,7 @@ const RunForm: React.FC = () => {
                   id="duration"
                   type="number"
                   {...register('minute', {
-                    required: true, min: 0,
+                    required: true, min: 0.01,
                   })}
                 />
                 <div className="ui basic label">
@@ -113,7 +137,7 @@ const RunForm: React.FC = () => {
                   id="duration"
                   type="number"
                   {...register('second', {
-                    required: true, min: 0,
+                    required: true, min: 0.01,
                   })}
                 />
                 <div className="ui basic label">
@@ -142,7 +166,7 @@ const RunForm: React.FC = () => {
               type="number"
               placeholder="Distance"
               {...register('distance', {
-                required: true, min: 0,
+                required: true, min: 0.01,
               })}
             />
             <select className="ui compact selection dropdown" {...register('distanceMeasurement')}>
@@ -187,8 +211,9 @@ const RunForm: React.FC = () => {
           </Transition>
         </Form.Field>
       </Form.Group>
-      <Button type="submit" primary disabled={!formState.isValid}>{ t('runForm.addButton')}</Button>
+      <Button type="submit" primary disabled={!formState.isValid}>{buttonTitle}</Button>
     </Form>
   );
 };
+
 export default RunForm;
