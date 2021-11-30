@@ -11,7 +11,26 @@ let runs : Run[] = [
     id: '3', title: 'nice', distanceInMeters: 3000, durationInSeconds: 16.3 * 60, date: new Date(),
   },
   {
-    id: '4', title: 'nice', distanceInMeters: 4321, durationInSeconds: 23.23123 * 60, date: new Date(),
+    id: '5', title: 'nice', distanceInMeters: 4321, durationInSeconds: 23.23123 * 60, date: new Date(),
+  },
+  {
+    id: '6', title: 'nice', distanceInMeters: 12000, durationInSeconds: 74.32 * 60, date: new Date(1603621021000),
+  },
+  {
+    id: '7', title: 'nice', distanceInMeters: 8200, durationInSeconds: 40.51 * 60, date: new Date(1603621021000),
+  },
+  {
+    id: '8', title: 'nice', distanceInMeters: 4050, durationInSeconds: 15.72 * 60, date: new Date(1602757021000),
+  },
+  {
+    id: '9', title: 'nice', distanceInMeters: 12500, durationInSeconds: 68.67 * 60, date: new Date(1601893021000),
+  },
+  {
+    id: '10', title: 'nice', distanceInMeters: 6010, durationInSeconds: 35.42 * 60, date: new Date(1599301021000),
+  },
+
+  {
+    id: '11', title: 'nice', distanceInMeters: 15330, durationInSeconds: 95.21 * 60, date: new Date(1599301021000),
   },
 ];
 

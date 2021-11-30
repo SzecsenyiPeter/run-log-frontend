@@ -5,6 +5,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
+      paceUnitShortKilometres: 'minute/km',
+      paceUnitShortMiles: 'minute/mile',
       menu: {
         addRun: 'Add run',
         allRuns: 'All runs',
@@ -38,11 +40,20 @@ const resources = {
         monthInterval: 'Month',
         yearInterval: 'Year',
         actions: 'Actions',
+        kilometresMeasurement: 'Kilometres',
+        milesMeasurement: 'Miles',
+        intervalLabel: 'Interval',
+        measurementLabel: 'Distance unit',
+      },
+      runGroupTable: {
+        overview: 'Total',
       },
     },
   },
   hu: {
     translation: {
+      paceUnitShortKilometres: 'perc/km',
+      paceUnitShortMiles: 'perc/mérföld',
       menu: {
         addRun: 'Új futás',
         allRuns: 'Futások',
@@ -76,6 +87,13 @@ const resources = {
         monthInterval: 'Hónap',
         yearInterval: 'Év',
         actions: 'Műveletek',
+        kilometresMeasurement: 'Kilóméterek',
+        milesMeasurement: 'Mérföldek',
+        intervalLabel: 'Felosztás',
+        measurementLabel: 'Mértékegység',
+      },
+      runGroupTable: {
+        overview: 'Összegzés',
       },
     },
   },

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { DateTime } from 'luxon';
-import { Container, Dropdown } from 'semantic-ui-react';
+import { Container, Form } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { getRuns, deleteRun } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 import { Run } from '../domain/Run';
+import { DistanceMeasurementContextInterface, DistanceMeasurements, MeasurementContext } from '../App';
 
 const AllRunList: React.FC = () => {
   const { t } = useTranslation();
@@ -31,9 +32,26 @@ const AllRunList: React.FC = () => {
       value: GroupingIntervals.YEAR,
     },
   ];
+  const distanceMeasurementOptions = [
+    {
+      key: DistanceMeasurements.KILOMETRES,
+      text: t('allRunList.kilometresMeasurement'),
+      value: DistanceMeasurements.KILOMETRES,
+    },
+    {
+      key: DistanceMeasurements.MILES,
+      text: t('allRunList.milesMeasurement'),
+      value: DistanceMeasurements.MILES,
+    },
+  ];
   const [selectedGrouping, setSelectedGrouping] = useState<GroupingIntervals>(
     GroupingIntervals.MONTH,
   );
+
+  const {
+    distanceMeasurement,
+    setDistanceMeasurement,
+  } = useContext<DistanceMeasurementContextInterface>(MeasurementContext);
 
   function getRunGroups() {
     let keyFormatString: string;
@@ -63,14 +81,30 @@ const AllRunList: React.FC = () => {
   return (
     <div>
       <Container>
-        <Dropdown
-          placeholder="None"
-          fluid
-          selection
-          options={groupingIntervalOptions}
-          value={selectedGrouping}
-          onChange={(event, data) => setSelectedGrouping(data.value as GroupingIntervals)}
-        />
+        <Form>
+          <Form.Group inline widths="equal">
+            <Form.Dropdown
+              laceholder="None"
+              label={t('allRunList.intervalLabel')}
+              fluid
+              inline
+              selection
+              options={groupingIntervalOptions}
+              value={selectedGrouping}
+              onChange={(event, data) => setSelectedGrouping(data.value as GroupingIntervals)}
+            />
+            <Form.Dropdown
+              fluid
+              selection
+              inline
+              label={t('allRunList.measurementLabel')}
+              options={distanceMeasurementOptions}
+              value={distanceMeasurement}
+              onChange={(event, data) => setDistanceMeasurement(data.value as DistanceMeasurements)}
+            />
+          </Form.Group>
+        </Form>
+
       </Container>
       <table className="ui celled table">
         <thead>

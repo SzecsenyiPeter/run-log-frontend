@@ -12,8 +12,8 @@ export enum PaceUnit {
     MINUTES_PER_MILE,
 }
 
-export function calculatePaceInUnit(run: Run, paceUnit : PaceUnit) {
-  const secondsPerMeters = run.durationInSeconds / run.distanceInMeters;
+export function calculatePaceInUnit(duration: number, distance: number, paceUnit : PaceUnit) {
+  const secondsPerMeters = duration / distance;
   switch (paceUnit) {
     case PaceUnit.MINUTES_PER_KILOMETER:
       return (secondsPerMeters / 60) * 1000;

@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-  Button, Form, Header, Transition,
+  Button, Dropdown, Form, Header, Transition,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { Run } from '../domain/Run';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import { DistanceMeasurements } from '../App';
 
 interface SubmitCallback {
   (run : Run) : void;
@@ -26,22 +27,35 @@ type FormValues = {
   second: number,
   distance: number,
   date: Date,
-  distanceMeasurement: string
+  distanceMeasurement: DistanceMeasurements
 }
-
-const defaultValues : FormValues = {
-  description: '',
-  title: '',
-  hour: 1,
-  minute: 1,
-  second: 1,
-  distance: 1,
-  date: new Date(),
-  distanceMeasurement: 'km',
-};
 
 const RunForm: React.FC<RunFormProps> = (props) => {
   const { t } = useTranslation();
+
+  const defaultValues : FormValues = {
+    description: '',
+    title: '',
+    hour: 1,
+    minute: 1,
+    second: 1,
+    distance: 1,
+    date: new Date(),
+    distanceMeasurement: DistanceMeasurements.KILOMETRES,
+  };
+
+  const distanceMeasurementOptions = [
+    {
+      key: DistanceMeasurements.KILOMETRES,
+      text: t('allRunList.kilometresMeasurement'),
+      value: DistanceMeasurements.KILOMETRES,
+    },
+    {
+      key: DistanceMeasurements.MILES,
+      text: t('allRunList.milesMeasurement'),
+      value: DistanceMeasurements.MILES,
+    },
+  ];
 
   const { buttonTitle, onSubmitCallback } = props;
 
@@ -52,7 +66,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
   const addRunFromForm = (data : FormValues) => {
     const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second * 1;
     let distanceInMeters = data.distance;
-    if (data.distanceMeasurement === 'km') {
+    if (data.distanceMeasurement === DistanceMeasurements.KILOMETRES) {
       distanceInMeters *= 1000;
     } else {
       distanceInMeters *= 1609;
@@ -169,10 +183,21 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                 required: true, min: 0.01,
               })}
             />
-            <select className="ui compact selection dropdown" {...register('distanceMeasurement')}>
-              <option value="km">{ t('runForm.kilometres') }</option>
-              <option selected value="m">{ t('runForm.miles') }</option>
-            </select>
+            <Controller
+              control={control}
+              name="distanceMeasurement"
+              rules={{ required: true }}
+              defaultValue={DistanceMeasurements.KILOMETRES}
+              render={({ field }) => (
+                <Dropdown
+                  selection
+                  label={t('allRunList.measurementLabel')}
+                  options={distanceMeasurementOptions}
+                  value={field.value}
+                  onChange={(event, data) => field.onChange(data.value as DistanceMeasurements)}
+                />
+              )}
+            />
           </div>
           { formState.errors.distance && (
           <Transition visible={!!formState.errors.distance} animation="scale" duration={500}>
@@ -211,7 +236,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           </Transition>
         </Form.Field>
       </Form.Group>
-      <Button type="submit" primary disabled={!formState.isValid}>{buttonTitle}</Button>
+      <Button type="submit" color="violet" disabled={!formState.isValid}>{buttonTitle}</Button>
     </Form>
   );
 };
