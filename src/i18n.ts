@@ -30,6 +30,14 @@ const resources = {
         dateLabel: 'Date',
         dateError: 'Must be filled',
       },
+      register: {
+        username: 'Username',
+        password: 'Password',
+        userTypeLabel: 'Are you a coach or an athlete',
+        athlete: 'Athlete',
+        coach: 'Coach',
+        submit: 'Submit',
+      },
       allRunList: {
         dateHeader: 'Date',
         titleHeader: 'Title',
