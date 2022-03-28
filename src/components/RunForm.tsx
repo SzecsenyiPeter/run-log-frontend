@@ -17,6 +17,7 @@ interface SubmitCallback {
 interface RunFormProps {
   buttonTitle: string;
   onSubmitCallback: SubmitCallback;
+  isSubmitButtonLoading: boolean;
 }
 
 type FormValues = {
@@ -57,7 +58,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
     },
   ];
 
-  const { buttonTitle, onSubmitCallback } = props;
+  const { buttonTitle, onSubmitCallback, isSubmitButtonLoading } = props;
 
   const {
     register, control, handleSubmit, formState,
@@ -78,6 +79,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
       durationInSeconds,
       distanceInMeters,
       date: data.date,
+      heartRate: 160,
     };
     onSubmitCallback(run);
   };
@@ -236,7 +238,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           </Transition>
         </Form.Field>
       </Form.Group>
-      <Button type="submit" color="violet" disabled={!formState.isValid}>{buttonTitle}</Button>
+      <Button type="submit" color="violet" disabled={!formState.isValid || isSubmitButtonLoading} loading={isSubmitButtonLoading}>{buttonTitle}</Button>
     </Form>
   );
 };

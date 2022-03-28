@@ -4,6 +4,7 @@ export interface Run {
     description?: string;
     durationInSeconds: number;
     distanceInMeters: number;
+    heartRate: number;
     date: Date;
 }
 

@@ -1,6 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
-import { Container, Form } from 'semantic-ui-react';
+import {
+  Container, Form, Loader, Segment,
+} from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { getRuns, deleteRun } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
@@ -10,10 +12,21 @@ import { DistanceMeasurementContextInterface, DistanceMeasurements, MeasurementC
 
 const AllRunList: React.FC = () => {
   const { t } = useTranslation();
-  const [runs, setRuns] = useState<Array<Run>>(getRuns());
-  const deleteRunCallback = (id: string) => {
-    deleteRun(id);
-    setRuns(getRuns());
+  const [runs, setRuns] = useState<Array<Run>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>();
+
+  useEffect(() => {
+    setIsLoading(true);
+    getRuns().then((result) => {
+      setRuns(result);
+      setIsLoading(false);
+    });
+  }, []);
+  const deleteRunCallback = async (id: string) => {
+    setIsLoading(true);
+    await deleteRun(id);
+    setRuns(await getRuns());
+    setIsLoading(false);
   };
   const groupingIntervalOptions = [
     {
@@ -106,23 +119,29 @@ const AllRunList: React.FC = () => {
         </Form>
 
       </Container>
-      <table className="ui celled table">
-        <thead>
-          <th>{t('allRunList.dateHeader')}</th>
-          <th>{t('allRunList.titleHeader')}</th>
-          <th>{t('allRunList.durationHeader')}</th>
-          <th>{t('allRunList.distanceHeader')}</th>
-          <th>{t('allRunList.paceHeader')}</th>
-          <th className="one wide">{t('allRunList.actions')}</th>
-        </thead>
-        {getRunGroups().map((runGroup : RunGroup) => (
-          <RunGroupTable
-            runGroup={runGroup}
-            groupBy={selectedGrouping}
-            onDeleteClicked={deleteRunCallback}
-          />
-        ))}
-      </table>
+      {isLoading ? <Segment placeholder><Loader active /></Segment>
+        : (
+          <table className="ui celled table">
+            <thead>
+              <tr>
+                <th>{t('allRunList.dateHeader')}</th>
+                <th>{t('allRunList.titleHeader')}</th>
+                <th>{t('allRunList.durationHeader')}</th>
+                <th>{t('allRunList.distanceHeader')}</th>
+                <th>{t('allRunList.paceHeader')}</th>
+                <th className="one wide">{t('allRunList.actions')}</th>
+              </tr>
+            </thead>
+            {getRunGroups().map((runGroup : RunGroup) => (
+              <RunGroupTable
+                runGroup={runGroup}
+                groupBy={selectedGrouping}
+                onDeleteClicked={deleteRunCallback}
+              />
+            ))}
+          </table>
+        )}
+
     </div>
   );
 };
