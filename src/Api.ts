@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Run } from './domain/Run';
+import { RegisterUser } from './domain/RegisterUser';
 
 async function addRun(run : Run) {
   await axios.post('/runs', run);
@@ -17,6 +18,10 @@ async function editRun(runToEdit: Run) {
   await axios.put(`runs/${runToEdit.id}`, runToEdit);
 }
 
+async function registerUser(newUser: RegisterUser) {
+  return axios.post('users/register', newUser);
+}
+
 export {
-  addRun, getRuns, deleteRun, editRun,
+  addRun, getRuns, deleteRun, editRun, registerUser,
 };

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import AddRunPage from './components/AddRunPage';
 import AllRunList from './components/AllRunList';
 import EditRunPage from './components/EditRunPage';
+import RegisterPage from './components/RegisterPage';
 
 export enum DistanceMeasurements {
   KILOMETRES,
@@ -49,6 +50,7 @@ const App: React.FC = () => {
             <Route component={AddRunPage} exact path="/add" />
             <Route component={AllRunList} exact path="/list" />
             <Route component={EditRunPage} exact path="/edit" />
+            <Route component={RegisterPage} exact path="/register" />
             <Route exact path="/">
               <Redirect to="/add" />
             </Route>

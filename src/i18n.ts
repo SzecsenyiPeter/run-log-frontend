@@ -85,6 +85,14 @@ const resources = {
         dateLabel: 'Dátum',
         dateError: 'Ki kell tölteni',
       },
+      register: {
+        username: 'Felhasználónév',
+        password: 'Jelszó',
+        userTypeLabel: 'Edzőként vagy futóként szeretnél regisztrálni?',
+        athlete: 'Futó',
+        coach: 'Edző',
+        submit: 'Küldés',
+      },
       allRunList: {
         dateHeader: 'Dátum',
         titleHeader: 'Cím',
