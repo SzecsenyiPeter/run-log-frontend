@@ -10,6 +10,8 @@ const resources = {
       menu: {
         addRun: 'Add run',
         allRuns: 'All runs',
+        register: 'Register',
+        login: 'Login',
       },
       runForm: {
         header: 'Add new run',
@@ -31,12 +33,17 @@ const resources = {
         dateError: 'Must be filled',
       },
       register: {
+        title: 'Sign up',
         username: 'Username',
         password: 'Password',
         userTypeLabel: 'Are you a coach or an athlete',
         athlete: 'Athlete',
         coach: 'Coach',
         submit: 'Submit',
+      },
+      login: {
+        title: 'Login',
+        submit: 'Login',
       },
       allRunList: {
         dateHeader: 'Date',
@@ -65,6 +72,8 @@ const resources = {
       menu: {
         addRun: 'Új futás',
         allRuns: 'Futások',
+        register: 'Regisztrálás',
+        login: 'Bejelentkezés',
       },
       runForm: {
         header: 'Új futás',
@@ -86,12 +95,17 @@ const resources = {
         dateError: 'Ki kell tölteni',
       },
       register: {
+        title: 'Regisztrálás',
         username: 'Felhasználónév',
         password: 'Jelszó',
         userTypeLabel: 'Edzőként vagy futóként szeretnél regisztrálni?',
         athlete: 'Futó',
         coach: 'Edző',
         submit: 'Küldés',
+      },
+      login: {
+        title: 'Bejelentkezés',
+        submit: 'Bejelentkezés',
       },
       allRunList: {
         dateHeader: 'Dátum',

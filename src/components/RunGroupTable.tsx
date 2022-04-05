@@ -7,7 +7,11 @@ import { calculatePaceInUnit, PaceUnit, Run } from '../domain/Run';
 import formatPace from '../utils/PaceDisplay';
 import { RunGroup } from '../domain/RunGroup';
 import '../style/hoverStyle.css';
-import { DistanceMeasurementContextInterface, DistanceMeasurements, MeasurementContext } from '../App';
+import {
+  DistanceMeasurements,
+  RunLogContext,
+  RunLogContextInterface,
+} from '../App';
 
 export enum GroupingIntervals {
   YEAR,
@@ -31,8 +35,8 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
   const { runs, date } = runGroup;
   const { t } = useTranslation();
   const {
-    distanceMeasurement,
-  } = useContext<DistanceMeasurementContextInterface>(MeasurementContext);
+    runLogState,
+  } = useContext<RunLogContextInterface>(RunLogContext);
   function getGroupDateFormatted() {
     const dateTime = DateTime.fromJSDate(date);
     switch (groupBy) {
@@ -47,7 +51,7 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
     }
   }
   function getDistanceInMeasurement(distance: number) {
-    switch (distanceMeasurement) {
+    switch (runLogState.distanceMeasurement) {
       case DistanceMeasurements.KILOMETRES:
         return `${(distance / 1000).toFixed(2)} km`;
       case DistanceMeasurements.MILES:
@@ -57,7 +61,7 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
     }
   }
   function getPaceInMeasurement(duration: number, distance: number) {
-    switch (distanceMeasurement) {
+    switch (runLogState.distanceMeasurement) {
       case DistanceMeasurements.KILOMETRES:
         return `${formatPace(calculatePaceInUnit(duration, distance, PaceUnit.MINUTES_PER_KILOMETER))} ${t('paceUnitShortKilometres')}`;
       case DistanceMeasurements.MILES:

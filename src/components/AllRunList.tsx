@@ -8,7 +8,12 @@ import { getRuns, deleteRun } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 import { Run } from '../domain/Run';
-import { DistanceMeasurementContextInterface, DistanceMeasurements, MeasurementContext } from '../App';
+import {
+  DistanceMeasurements,
+  RunLogContext,
+  RunLogContextInterface,
+
+} from '../App';
 
 const AllRunList: React.FC = () => {
   const { t } = useTranslation();
@@ -62,9 +67,9 @@ const AllRunList: React.FC = () => {
   );
 
   const {
-    distanceMeasurement,
-    setDistanceMeasurement,
-  } = useContext<DistanceMeasurementContextInterface>(MeasurementContext);
+    runLogState,
+    setRunLogState,
+  } = useContext<RunLogContextInterface>(RunLogContext);
 
   function getRunGroups() {
     let keyFormatString: string;
@@ -112,8 +117,11 @@ const AllRunList: React.FC = () => {
               inline
               label={t('allRunList.measurementLabel')}
               options={distanceMeasurementOptions}
-              value={distanceMeasurement}
-              onChange={(event, data) => setDistanceMeasurement(data.value as DistanceMeasurements)}
+              value={runLogState.distanceMeasurement}
+              onChange={(event, data) => setRunLogState({
+                ...runLogState,
+                distanceMeasurement: data.value as DistanceMeasurements,
+              })}
             />
           </Form.Group>
         </Form>
