@@ -4,7 +4,7 @@ import {
   Button,
   Container, Form,
 } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../Api';
 import { LoginUser } from '../domain/LoginUser';
 import { RunLogContext, RunLogContextInterface } from '../App';
@@ -12,7 +12,7 @@ import { RunLogContext, RunLogContextInterface } from '../App';
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
           isLoggedIn: true,
         },
       });
-      history.push({ pathname: '/list' });
+      navigate('/list');
       setIsSending(false);
     } catch (exception) {
       setIsSending(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Route, BrowserRouter as Router, Switch, NavLink, Redirect,
+  Route, BrowserRouter as Router, Routes, NavLink, Navigate,
 } from 'react-router-dom';
 import './App.css';
 import { Container, Header, Menu } from 'semantic-ui-react';
@@ -11,6 +11,7 @@ import EditRunPage from './components/EditRunPage';
 import RegisterPage from './components/RegisterPage';
 import LoginPage from './components/LoginPage';
 import { UserTypes } from './domain/RegisterUser';
+import RestrictedPage from './components/RestrictedPage';
 
 export enum DistanceMeasurements {
   KILOMETRES,
@@ -65,10 +66,10 @@ const App: React.FC = () => {
             && (
             <>
               <Menu.Item as="a">
-                <NavLink to="/list" activeStyle={{ color: 'grey' }}>{t('menu.allRuns')}</NavLink>
+                <NavLink to="/list" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.allRuns')}</NavLink>
               </Menu.Item>
               <Menu.Item as="a">
-                <NavLink to="/add" activeStyle={{ color: 'grey' }}>{t('menu.addRun')}</NavLink>
+                <NavLink to="/add" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.addRun')}</NavLink>
               </Menu.Item>
             </>
             )}
@@ -76,10 +77,10 @@ const App: React.FC = () => {
             && (
             <>
               <Menu.Item as="a">
-                <NavLink to="/register" activeStyle={{ color: 'grey' }}>{t('menu.register')}</NavLink>
+                <NavLink to="/register" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.register')}</NavLink>
               </Menu.Item>
               <Menu.Item as="a">
-                <NavLink to="/login" activeStyle={{ color: 'grey' }}>{t('menu.login')}</NavLink>
+                <NavLink to="/login" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.login')}</NavLink>
               </Menu.Item>
             </>
             )}
@@ -89,16 +90,14 @@ const App: React.FC = () => {
           paddingTop: '4em', paddingBottom: '2em', paddingRight: '2em', paddingLeft: '2em', backgroundColor: 'whiteSmoke', border: '4px whiteSmoke solid', borderRadius: '8px',
         }}
         >
-          <Switch>
-            <Route component={AddRunPage} exact path="/add" />
-            <Route component={AllRunList} exact path="/list" />
-            <Route component={EditRunPage} exact path="/edit" />
-            <Route component={RegisterPage} exact path="/register" />
-            <Route component={LoginPage} exact path="/login" />
-            <Route exact path="/">
-              <Redirect to="/list" />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AddRunPage /></RestrictedPage>} path="/add" />
+            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AllRunList /></RestrictedPage>} path="/list" />
+            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><EditRunPage /></RestrictedPage>} path="/edit" />
+            <Route element={<RestrictedPage shouldBeLoggedIn={false} redirectTo="/list"><RegisterPage /></RestrictedPage>} path="/register" />
+            <Route element={<RestrictedPage shouldBeLoggedIn={false} redirectTo="/list"><LoginPage /></RestrictedPage>} path="/login" />
+            <Route path="/" element={<Navigate replace to="/home" />} />
+          </Routes>
         </Container>
       </Router>
     </RunLogContext.Provider>

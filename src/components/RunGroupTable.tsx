@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import { MdDelete, MdEditNote } from 'react-icons/md';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { calculatePaceInUnit, PaceUnit, Run } from '../domain/Run';
 import formatPace from '../utils/PaceDisplay';
 import { RunGroup } from '../domain/RunGroup';
@@ -31,7 +31,7 @@ interface RunGroupTableProps {
 
 const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
   const { runGroup, groupBy, onDeleteClicked } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   const { runs, date } = runGroup;
   const { t } = useTranslation();
   const {
@@ -87,7 +87,7 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
           <td>{getDistanceInMeasurement(run.distanceInMeters)}</td>
           <td>{getPaceInMeasurement(run.durationInSeconds, run.distanceInMeters)}</td>
           <td className="center aligned">
-            <MdEditNote size="2em" className="editButton" onClick={() => history.push({ pathname: '/edit', state: { id: run.id } })} />
+            <MdEditNote size="2em" className="editButton" onClick={() => navigate('/edit', { state: { id: run.id! } })} />
             <MdDelete size="2em" className="deleteButton" onClick={() => onDeleteClicked(run.id!)} />
           </td>
         </tr>

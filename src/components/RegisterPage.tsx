@@ -4,14 +4,14 @@ import {
   Button,
   Container, Form,
 } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RegisterUser, UserTypes } from '../domain/RegisterUser';
 import { registerUser } from '../Api';
 
 const RegisterPage: React.FC = () => {
   const { t } = useTranslation();
 
-  const history = useHistory();
+  const naviage = useNavigate();
 
   const UserTypeOptions = [
     {
@@ -42,7 +42,7 @@ const RegisterPage: React.FC = () => {
       userType: selectedUserType,
     };
     await registerUser(newUser);
-    history.push({ pathname: '/list' });
+    naviage('/list');
     setIsSending(false);
   };
 

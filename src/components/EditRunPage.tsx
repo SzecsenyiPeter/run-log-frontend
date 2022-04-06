@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import RunForm from './RunForm';
 import { editRun } from '../Api';
 import { Run } from '../domain/Run';
@@ -12,8 +12,9 @@ interface EditRunState {
 const EditRunPage: React.FC = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
-  const state = history.location.state as EditRunState;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as EditRunState;
 
   const editRunSubmitted = async (run: Run) => {
     setIsLoading(true);
@@ -21,7 +22,7 @@ const EditRunPage: React.FC = () => {
     run.id = state.id;
     await editRun(run);
     setIsLoading(false);
-    history.push('/list');
+    navigate('/list');
   };
 
   return (
