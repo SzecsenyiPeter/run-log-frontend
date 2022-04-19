@@ -1,6 +1,6 @@
 export enum UserTypes {
+    COACH,
     ATHLETE,
-    COACH
 }
 
 export interface RegisterUser {

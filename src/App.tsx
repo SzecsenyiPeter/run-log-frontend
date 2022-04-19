@@ -5,6 +5,7 @@ import {
 import './App.css';
 import { Container, Header, Menu } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
+import { toast, ToastContainer } from 'react-toastify';
 import AddRunPage from './components/AddRunPage';
 import AllRunList from './components/AllRunList';
 import EditRunPage from './components/EditRunPage';
@@ -12,6 +13,7 @@ import RegisterPage from './components/RegisterPage';
 import LoginPage from './components/LoginPage';
 import { UserTypes } from './domain/RegisterUser';
 import RestrictedPage from './components/RestrictedPage';
+import 'react-toastify/dist/ReactToastify.css';
 
 export enum DistanceMeasurements {
   KILOMETRES,
@@ -24,9 +26,15 @@ export interface AuthState {
   isLoggedIn: boolean;
 }
 
+export enum NotificationTypes {
+  SUCCESS,
+  ERROR
+}
+
 export interface RunLogState {
   distanceMeasurement: DistanceMeasurements;
   authState: AuthState;
+  triggerNotification: (message: string, type: NotificationTypes) => void;
 }
 export interface RunLogContextInterface {
   runLogState: RunLogState;
@@ -41,6 +49,7 @@ export const RunLogContext = React.createContext<RunLogContextInterface>({
       userType: UserTypes.ATHLETE,
       isLoggedIn: false,
     },
+    triggerNotification: () => undefined,
   },
   setRunLogState: () => undefined,
 });
@@ -54,6 +63,35 @@ const App: React.FC = () => {
       userType: UserTypes.ATHLETE,
       isLoggedIn: false,
     },
+    triggerNotification: (message: string, type: NotificationTypes) => {
+      switch (type) {
+        case NotificationTypes.ERROR:
+          toast.error(message, {
+            position: 'bottom-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          break;
+        case NotificationTypes.SUCCESS:
+          toast.success(message, {
+            position: 'bottom-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          break;
+        default:
+          break;
+      }
+    },
+
   });
   const value = { runLogState, setRunLogState };
   return (
@@ -100,6 +138,18 @@ const App: React.FC = () => {
           </Routes>
         </Container>
       </Router>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </RunLogContext.Provider>
   );
 };

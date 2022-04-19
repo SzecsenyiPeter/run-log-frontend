@@ -20,12 +20,21 @@ async function editRun(runToEdit: Run) {
   await axios.put(`runs/${runToEdit.id}`, runToEdit);
 }
 
+async function getUnaffiliatedRunners() {
+  return (await axios.get('users/athletes')).data;
+}
+
+async function setAthletesCoach(athleteName: string) {
+  await axios.patch(`users/${athleteName}/coach`);
+}
+
 async function registerUser(newUser: RegisterUser) {
   return axios.post('users/register', newUser);
 }
 
 async function loginUser(user: LoginUser) : Promise<LoginResponse> {
   const userResponse = await axios.post('users/login', user);
+  console.log(userResponse);
   return {
     username: userResponse.data.username,
     userType: userResponse.data.userType,
@@ -33,5 +42,12 @@ async function loginUser(user: LoginUser) : Promise<LoginResponse> {
 }
 
 export {
-  addRun, getRuns, deleteRun, editRun, registerUser, loginUser,
+  addRun,
+  getRuns,
+  deleteRun,
+  editRun,
+  registerUser,
+  loginUser,
+  getUnaffiliatedRunners,
+  setAthletesCoach,
 };

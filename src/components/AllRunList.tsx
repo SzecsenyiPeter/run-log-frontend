@@ -4,16 +4,13 @@ import {
   Container, Form, Loader, Segment,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { getRuns, deleteRun } from '../Api';
+import { deleteRun, getRuns } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 import { Run } from '../domain/Run';
-import {
-  DistanceMeasurements,
-  RunLogContext,
-  RunLogContextInterface,
-
-} from '../App';
+import { DistanceMeasurements, RunLogContext, RunLogContextInterface } from '../App';
+import AddCoachedAthleteModal from './AddCoachedAthleteModal';
+import { UserTypes } from '../domain/RegisterUser';
 
 const AllRunList: React.FC = () => {
   const { t } = useTranslation();
@@ -123,6 +120,8 @@ const AllRunList: React.FC = () => {
                 distanceMeasurement: data.value as DistanceMeasurements,
               })}
             />
+            {runLogState.authState.userType === UserTypes.COACH
+            && <AddCoachedAthleteModal />}
           </Form.Group>
         </Form>
 

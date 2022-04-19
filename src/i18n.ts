@@ -7,6 +7,15 @@ const resources = {
     translation: {
       paceUnitShortKilometres: 'minute/km',
       paceUnitShortMiles: 'minute/mile',
+      genericSuccess: 'Successful',
+      genericFailure: 'Something went wrong',
+      setCoach: {
+        open: 'Add athlete',
+        title: 'Take on athletes for coaching',
+        placeholder: 'Select athlete by typing',
+        cancel: 'Cancel',
+        add: 'Take on',
+      },
       menu: {
         addRun: 'Add run',
         allRuns: 'All runs',
@@ -31,6 +40,7 @@ const resources = {
         formError: 'Must be filled, and only positive numbers allowed',
         dateLabel: 'Date',
         dateError: 'Must be filled',
+        success: 'Run added successfully',
       },
       register: {
         title: 'Sign up',
@@ -44,6 +54,7 @@ const resources = {
       login: {
         title: 'Login',
         submit: 'Login',
+        failed: 'Login failed',
       },
       allRunList: {
         dateHeader: 'Date',
@@ -69,6 +80,15 @@ const resources = {
     translation: {
       paceUnitShortKilometres: 'perc/km',
       paceUnitShortMiles: 'perc/mérföld',
+      genericSuccess: 'Sikerült',
+      genericFailure: 'Nem sikerült',
+      setCoach: {
+        open: 'Futó felvétele',
+        title: 'Futó felvétele edzettként ',
+        placeholder: 'Futó kiválasztása...',
+        cancel: 'Mégse',
+        add: 'Felvétel',
+      },
       menu: {
         addRun: 'Új futás',
         allRuns: 'Futások',
@@ -93,6 +113,7 @@ const resources = {
         formError: 'Ki kell tölteni, és csak pozitív számot lehet megadni',
         dateLabel: 'Dátum',
         dateError: 'Ki kell tölteni',
+        success: 'Futás sikeresen hozzáadva',
       },
       register: {
         title: 'Regisztrálás',
@@ -106,6 +127,7 @@ const resources = {
       login: {
         title: 'Bejelentkezés',
         submit: 'Bejelentkezés',
+        failed: 'Sikertelen bejelentkezés!',
       },
       allRunList: {
         dateHeader: 'Dátum',

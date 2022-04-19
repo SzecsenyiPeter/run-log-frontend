@@ -1,13 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  Container, Form,
-} from 'semantic-ui-react';
+import { Button, Container, Form } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../Api';
 import { LoginUser } from '../domain/LoginUser';
-import { RunLogContext, RunLogContextInterface } from '../App';
+import { NotificationTypes, RunLogContext, RunLogContextInterface } from '../App';
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
@@ -43,6 +40,7 @@ const LoginPage: React.FC = () => {
       navigate('/list');
       setIsSending(false);
     } catch (exception) {
+      runLogState.triggerNotification(t('login.failed'), NotificationTypes.ERROR);
       setIsSending(false);
     }
   };
