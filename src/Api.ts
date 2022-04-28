@@ -3,6 +3,7 @@ import { Run } from './domain/Run';
 import { RegisterUser } from './domain/RegisterUser';
 import { LoginUser } from './domain/LoginUser';
 import { LoginResponse } from './domain/LoginResponse';
+import { CreateRunPlan } from './domain/CreateRunPlan';
 
 async function addRun(run : Run) {
   await axios.post('/runs', run);
@@ -24,12 +25,20 @@ async function getUnaffiliatedRunners() {
   return (await axios.get('users/athletes')).data;
 }
 
+async function getOwnRunners() {
+  return (await axios.get<Array<string>>('users/athletes?show-own=true')).data;
+}
+
 async function setAthletesCoach(athleteName: string) {
   await axios.patch(`users/${athleteName}/coach`);
 }
 
 async function registerUser(newUser: RegisterUser) {
   return axios.post('users/register', newUser);
+}
+
+async function addRunPlan(createRunPlan: CreateRunPlan) {
+  return axios.post('run-plans', createRunPlan);
 }
 
 async function loginUser(user: LoginUser) : Promise<LoginResponse> {
@@ -50,4 +59,6 @@ export {
   loginUser,
   getUnaffiliatedRunners,
   setAthletesCoach,
+  addRunPlan,
+  getOwnRunners,
 };

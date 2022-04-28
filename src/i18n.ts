@@ -21,6 +21,7 @@ const resources = {
         allRuns: 'All runs',
         register: 'Register',
         login: 'Login',
+        createRunPlan: 'Create run plan',
       },
       runForm: {
         header: 'Add new run',
@@ -74,6 +75,14 @@ const resources = {
       runGroupTable: {
         overview: 'Total',
       },
+      runPlanForm: {
+        header: 'Create run plan',
+        instructions: 'Instructions:',
+        instructionsPlaceholder: 'Tell the athlete what to do',
+        distance: 'Distance:',
+        assignedTo: 'Add athletes to assign:',
+        submit: 'Create',
+      },
     },
   },
   hu: {
@@ -94,6 +103,7 @@ const resources = {
         allRuns: 'Futások',
         register: 'Regisztrálás',
         login: 'Bejelentkezés',
+        createRunPlan: 'Futás terv létrehozása',
       },
       runForm: {
         header: 'Új futás',
@@ -143,6 +153,14 @@ const resources = {
         milesMeasurement: 'Mérföldek',
         intervalLabel: 'Felosztás',
         measurementLabel: 'Mértékegység',
+      },
+      runPlanForm: {
+        header: 'Futás terv létrehozása',
+        instructions: 'Instrukciók:',
+        instructionsPlaceholder: 'Mit csináljon a futó...',
+        distance: 'Táv:',
+        assignedTo: 'Melyik futónak legyen elküldve?',
+        submit: 'Létrehozás',
       },
       runGroupTable: {
         overview: 'Összegzés',

@@ -14,6 +14,7 @@ import LoginPage from './components/LoginPage';
 import { UserTypes } from './domain/RegisterUser';
 import RestrictedPage from './components/RestrictedPage';
 import 'react-toastify/dist/ReactToastify.css';
+import CreateRunPlanPage from './components/CreateRunPlanPage';
 
 export enum DistanceMeasurements {
   KILOMETRES,
@@ -109,6 +110,9 @@ const App: React.FC = () => {
               <Menu.Item as="a">
                 <NavLink to="/add" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.addRun')}</NavLink>
               </Menu.Item>
+              <Menu.Item as="a">
+                <NavLink to="/create-run-plan" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.createRunPlan')}</NavLink>
+              </Menu.Item>
             </>
             )}
             {!runLogState.authState.isLoggedIn
@@ -132,6 +136,7 @@ const App: React.FC = () => {
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AddRunPage /></RestrictedPage>} path="/add" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AllRunList /></RestrictedPage>} path="/list" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><EditRunPage /></RestrictedPage>} path="/edit" />
+            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><CreateRunPlanPage /></RestrictedPage>} path="/create-run-plan" />
             <Route element={<RestrictedPage shouldBeLoggedIn={false} redirectTo="/list"><RegisterPage /></RestrictedPage>} path="/register" />
             <Route element={<RestrictedPage shouldBeLoggedIn={false} redirectTo="/list"><LoginPage /></RestrictedPage>} path="/login" />
             <Route path="/" element={<Navigate replace to="/home" />} />
