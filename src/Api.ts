@@ -9,9 +9,11 @@ async function addRun(run : Run) {
   await axios.post('/runs', run);
 }
 
-async function getRuns() {
-  const response = await axios.get('/runs');
-  return response.data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
+async function getRuns(runner: string | null) {
+  if (runner === null) {
+    return (await axios.get('runs')).data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
+  }
+  return (await axios.get(`runs?athlete=${runner}`)).data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
 }
 async function deleteRun(id: string) {
   await axios.delete(`runs/${id}`);
@@ -41,6 +43,13 @@ async function addRunPlan(createRunPlan: CreateRunPlan) {
   return axios.post('run-plans', createRunPlan);
 }
 
+async function getRunPlans(runner: string | null) {
+  if (runner === null) {
+    return (await axios.get('run-plans')).data.map((runPlan: any) => ({ ...runPlan, date: new Date(runPlan.date) }));
+  }
+  return (await axios.get(`run-plans?athlete=${runner}`)).data.map((runPlan: any) => ({ ...runPlan, date: new Date(runPlan.date) }));
+}
+
 async function loginUser(user: LoginUser) : Promise<LoginResponse> {
   const userResponse = await axios.post('users/login', user);
   console.log(userResponse);
@@ -61,4 +70,5 @@ export {
   setAthletesCoach,
   addRunPlan,
   getOwnRunners,
+  getRunPlans,
 };

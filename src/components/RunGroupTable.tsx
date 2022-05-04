@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import { MdDelete, MdEditNote } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineCalendar, BiRun } from 'react-icons/all';
 import { calculatePaceInUnit, PaceUnit, Run } from '../domain/Run';
 import formatPace from '../utils/PaceDisplay';
 import { RunGroup } from '../domain/RunGroup';
@@ -12,6 +13,7 @@ import {
   RunLogContext,
   RunLogContextInterface,
 } from '../App';
+import { RunPlan } from '../domain/RunPlan';
 
 export enum GroupingIntervals {
   YEAR,
@@ -28,11 +30,16 @@ interface RunGroupTableProps {
   groupBy: GroupingIntervals;
   onDeleteClicked: OnRunClicked;
 }
-
+function isRun(groupable: Run | RunPlan): groupable is Run {
+  return (groupable as Run).heartRate !== undefined;
+}
+function isRunPlan(groupable: Run | RunPlan): groupable is RunPlan {
+  return (groupable as RunPlan).instructions !== undefined;
+}
 const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
   const { runGroup, groupBy, onDeleteClicked } = props;
   const navigate = useNavigate();
-  const { runs, date } = runGroup;
+  const { groupables, date } = runGroup;
   const { t } = useTranslation();
   const {
     runLogState,
@@ -71,29 +78,59 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
     }
   }
   function getTotalDistance() {
-    return runs.reduce<number>((sum, run) => sum + run.distanceInMeters, 0);
+    return groupables
+      .filter<Run>(isRun)
+      .reduce<number>((sum, run) => sum + run.distanceInMeters, 0);
   }
   function getTotalTime() {
-    return runs.reduce<number>((sum, run) => sum + run.durationInSeconds, 0);
+    return groupables
+      .filter<Run>(isRun)
+      .reduce<number>((sum, run) => sum + run.durationInSeconds, 0);
   }
   return (
     <>
-      <tr className="active center aligned"><td colSpan={6} style={{ fontWeight: 'bold' }}>{getGroupDateFormatted()}</td></tr>
-      {runs.map((run : Run) => (
-        <tr>
-          <td>{run.date.toLocaleDateString()}</td>
-          <td>{run.title}</td>
-          <td>{`${formatPace(run.durationInSeconds / 60)}`}</td>
-          <td>{getDistanceInMeasurement(run.distanceInMeters)}</td>
-          <td>{getPaceInMeasurement(run.durationInSeconds, run.distanceInMeters)}</td>
-          <td className="center aligned">
-            <MdEditNote size="2em" className="editButton" onClick={() => navigate('/edit', { state: { id: run.id! } })} />
-            <MdDelete size="2em" className="deleteButton" onClick={() => onDeleteClicked(run.id!)} />
-          </td>
-        </tr>
+      <tr className="active center aligned"><td colSpan={7} style={{ fontWeight: 'bold' }}>{getGroupDateFormatted()}</td></tr>
+      {groupables.map((groupable) => (
+        <>
+          {isRun(groupable) && (
+            <tr>
+              <td>{groupable.date.toLocaleDateString()}</td>
+              <td className="center aligned"><BiRun size="1.4em" style={{ color: '#6435c9' }} /></td>
+              <td>
+                {groupable.title}
+              </td>
+              <td>{`${formatPace(groupable.durationInSeconds / 60)}`}</td>
+              <td>{getDistanceInMeasurement(groupable.distanceInMeters)}</td>
+              <td>
+                {
+                  getPaceInMeasurement(groupable.durationInSeconds, groupable.distanceInMeters)
+                }
+              </td>
+              <td className="center aligned">
+                <MdEditNote size="2em" className="editButton" onClick={() => navigate('/edit', { state: { id: groupable.id! } })} />
+                <MdDelete size="2em" className="deleteButton" onClick={() => onDeleteClicked(groupable.id!)} />
+              </td>
+            </tr>
+          )}
+          {isRunPlan(groupable) && (
+          <tr>
+            <td>{groupable.date.toLocaleDateString()}</td>
+            <td className="center aligned"><AiOutlineCalendar size="1.4em" style={{ color: '#6435c9' }} /></td>
+            <td>
+              {groupable.instructions}
+            </td>
+            <td />
+            <td>{groupable.distance !== undefined ? getDistanceInMeasurement(groupable.distance) : ''}</td>
+            <td />
+            <td />
+          </tr>
+          )}
+        </>
+
       ))}
       <tr style={{ fontWeight: 'bold', color: '#6435c9 !important' }}>
         <td style={{ color: '#6435c9' }}>{t('runGroupTable.overview')}</td>
+        <td />
         <td />
         <td style={{ color: '#6435c9' }}>{`${formatPace(getTotalTime() / 60)}`}</td>
         <td style={{ color: '#6435c9' }}>{getDistanceInMeasurement(getTotalDistance())}</td>

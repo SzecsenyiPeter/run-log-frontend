@@ -4,30 +4,46 @@ import {
   Container, Form, Loader, Segment,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { deleteRun, getRuns } from '../Api';
+import { deleteRun, getRunPlans, getRuns } from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 import { Run } from '../domain/Run';
 import { DistanceMeasurements, RunLogContext, RunLogContextInterface } from '../App';
 import AddCoachedAthleteModal from './AddCoachedAthleteModal';
 import { UserTypes } from '../domain/RegisterUser';
+import { RunPlan } from '../domain/RunPlan';
 
-const AllRunList: React.FC = () => {
+export interface AllRunListProps {
+  userToShow: string | null;
+}
+
+const AllRunList: React.FC<AllRunListProps> = (props) => {
   const { t } = useTranslation();
-  const [runs, setRuns] = useState<Array<Run>>([]);
+  const { userToShow } = props;
+  const [groupables, setGroupables] = useState<Array<Run | RunPlan>>([]);
   const [isLoading, setIsLoading] = useState<boolean>();
+
+  function loadGroupables() {
+    getRuns(userToShow).then((runResult) => {
+      const runs: Array<Run> = runResult;
+      getRunPlans(userToShow).then((runPlanResult) => {
+        const runPlans: Array<RunPlan> = runPlanResult;
+        setGroupables(groupables
+          .concat(runs, runPlans)
+          .sort((first, second) => first.date.getTime() - second.date.getTime()));
+        setIsLoading(false);
+      });
+    });
+  }
 
   useEffect(() => {
     setIsLoading(true);
-    getRuns().then((result) => {
-      setRuns(result);
-      setIsLoading(false);
-    });
+    loadGroupables();
   }, []);
   const deleteRunCallback = async (id: string) => {
     setIsLoading(true);
     await deleteRun(id);
-    setRuns(await getRuns());
+    loadGroupables();
     setIsLoading(false);
   };
   const groupingIntervalOptions = [
@@ -84,12 +100,12 @@ const AllRunList: React.FC = () => {
         break;
     }
     const runGroups: Map<string, RunGroup> = new Map<string, RunGroup>();
-    runs.forEach((run) => {
+    groupables.forEach((run) => {
       const currentKey = DateTime.fromJSDate(run.date).toFormat(keyFormatString);
       if (!runGroups.has(currentKey)) {
-        runGroups.set(currentKey, { runs: [], date: run.date });
+        runGroups.set(currentKey, { groupables: [], date: run.date });
       }
-      runGroups.get(currentKey)!.runs.push(run);
+      runGroups.get(currentKey)!.groupables.push(run);
     });
     return Array.from(runGroups, ([, value]) => (value));
   }
@@ -132,6 +148,7 @@ const AllRunList: React.FC = () => {
             <thead>
               <tr>
                 <th>{t('allRunList.dateHeader')}</th>
+                <th>{t('allRunList.typeHeader')}</th>
                 <th>{t('allRunList.titleHeader')}</th>
                 <th>{t('allRunList.durationHeader')}</th>
                 <th>{t('allRunList.distanceHeader')}</th>

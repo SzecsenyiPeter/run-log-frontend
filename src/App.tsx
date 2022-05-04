@@ -134,7 +134,7 @@ const App: React.FC = () => {
         >
           <Routes>
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AddRunPage /></RestrictedPage>} path="/add" />
-            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AllRunList /></RestrictedPage>} path="/list" />
+            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AllRunList userToShow={null} /></RestrictedPage>} path="/list" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><EditRunPage /></RestrictedPage>} path="/edit" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><CreateRunPlanPage /></RestrictedPage>} path="/create-run-plan" />
             <Route element={<RestrictedPage shouldBeLoggedIn={false} redirectTo="/list"><RegisterPage /></RestrictedPage>} path="/register" />

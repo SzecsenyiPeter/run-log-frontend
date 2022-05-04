@@ -59,6 +59,7 @@ const resources = {
       },
       allRunList: {
         dateHeader: 'Date',
+        typeHeader: 'Type',
         titleHeader: 'Title',
         durationHeader: 'Duration',
         distanceHeader: 'Distance',
@@ -141,6 +142,7 @@ const resources = {
       },
       allRunList: {
         dateHeader: 'Dátum',
+        typeHeader: 'Típus',
         titleHeader: 'Cím',
         durationHeader: 'Időtartam',
         distanceHeader: 'Táv',

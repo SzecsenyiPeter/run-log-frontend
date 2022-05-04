@@ -1,6 +1,7 @@
 import { Run } from './Run';
+import { RunPlan } from './RunPlan';
 
 export interface RunGroup {
-    runs: Run[];
+    groupables: Array<Run | RunPlan>;
     date: Date;
 }
