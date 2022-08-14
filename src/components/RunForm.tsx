@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button, Dropdown, Form, Header, Transition,
 } from 'semantic-ui-react';
@@ -61,11 +61,11 @@ const RunForm: React.FC<RunFormProps> = (props) => {
   const { buttonTitle, onSubmitCallback, isSubmitButtonLoading } = props;
 
   const {
-    register, control, handleSubmit, formState,
+    register, control, handleSubmit, formState, getValues,
   } = useForm<FormValues>({ mode: 'onChange', defaultValues });
 
   const addRunFromForm = (data : FormValues) => {
-    const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second * 1;
+    const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second;
     let distanceInMeters = data.distance;
     if (data.distanceMeasurement === DistanceMeasurements.KILOMETRES) {
       distanceInMeters *= 1000;
@@ -83,6 +83,10 @@ const RunForm: React.FC<RunFormProps> = (props) => {
     };
     onSubmitCallback(run);
   };
+
+  const [durationValidity, setDurationValidity] = useState(true);
+
+  const checkDurationValidity = () => setDurationValidity(Number(getValues('hour')) + Number(getValues('minute')) + Number(getValues('second')) > 0);
 
   return (
     <Form onSubmit={handleSubmit(addRunFromForm)}>
@@ -111,7 +115,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   id="duration"
                   type="number"
                   {...register('hour', {
-                    required: true, min: 0.01,
+                    required: true, min: 0.0, onChange: checkDurationValidity,
                   })}
                 />
                 <div className="ui basic label">
@@ -132,7 +136,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   id="duration"
                   type="number"
                   {...register('minute', {
-                    required: true, min: 0.01,
+                    required: true, min: 0.0, onChange: checkDurationValidity,
                   })}
                 />
                 <div className="ui basic label">
@@ -153,7 +157,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   id="duration"
                   type="number"
                   {...register('second', {
-                    required: true, min: 0.01,
+                    required: true, min: 0.0, onChange: checkDurationValidity,
                   })}
                 />
                 <div className="ui basic label">
@@ -171,6 +175,13 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           </Form.Group>
         </Form.Field>
       </Form.Group>
+      <Transition visible={!durationValidity} animation="scale" duration={500}>
+        <div className="ui pointing red basic label">
+          {' '}
+          { t('runForm.durationError') }
+          {' '}
+        </div>
+      </Transition>
       <Form.Group widths="equal">
         <Form.Field>
           <label htmlFor="distance">
@@ -182,7 +193,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
               type="number"
               placeholder="Distance"
               {...register('distance', {
-                required: true, min: 0.01,
+                required: true, min: 0.0,
               })}
             />
             <Controller
