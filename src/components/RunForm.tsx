@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button, Dropdown, Form, Header, Transition,
 } from 'semantic-ui-react';
@@ -61,7 +61,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
   const { buttonTitle, onSubmitCallback, isSubmitButtonLoading } = props;
 
   const {
-    register, control, handleSubmit, formState, getValues,
+    register, control, handleSubmit, formState, getValues, trigger,
   } = useForm<FormValues>({ mode: 'onChange', defaultValues });
 
   const addRunFromForm = (data : FormValues) => {
@@ -84,9 +84,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
     onSubmitCallback(run);
   };
 
-  const [durationValidity, setDurationValidity] = useState(true);
-
-  const checkDurationValidity = () => setDurationValidity(Number(getValues('hour')) + Number(getValues('minute')) + Number(getValues('second')) > 0);
+  const validateDuration = () => Number(getValues('hour')) + Number(getValues('minute')) + Number(getValues('second')) > 0;
 
   return (
     <Form onSubmit={handleSubmit(addRunFromForm)}>
@@ -115,15 +113,15 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   id="duration"
                   type="number"
                   {...register('hour', {
-                    required: true, min: 0.0, onChange: checkDurationValidity,
+                    required: true, min: 0.0, validate: validateDuration, onChange: () => trigger(),
                   })}
                 />
                 <div className="ui basic label">
                   { t('runForm.hourLabel') }
                 </div>
               </div>
-              <Transition visible={!!formState.errors.hour} animation="slide down" duration={500}>
-                <div className="ui pointing red basic label">
+              <Transition visible={!!formState.errors.hour || !!formState.errors.minute || !!formState.errors.second} animation="slide down" duration={500}>
+                <div className="ui red basic label" style={{ marginTop: '10px' }}>
                   {' '}
                   { t('runForm.formError') }
                   {' '}
@@ -136,20 +134,13 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   id="duration"
                   type="number"
                   {...register('minute', {
-                    required: true, min: 0.0, onChange: checkDurationValidity,
+                    required: true, min: 0.0, validate: validateDuration, onChange: () => trigger(),
                   })}
                 />
                 <div className="ui basic label">
                   { t('runForm.minuteLabel') }
                 </div>
               </div>
-              <Transition visible={!!formState.errors.minute} animation="scale" duration={500}>
-                <div className="ui pointing red basic label">
-                  {' '}
-                  { t('runForm.formError') }
-                  {' '}
-                </div>
-              </Transition>
             </Form.Field>
             <Form.Field>
               <div className="ui right labeled input">
@@ -157,31 +148,17 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   id="duration"
                   type="number"
                   {...register('second', {
-                    required: true, min: 0.0, onChange: checkDurationValidity,
+                    required: true, min: 0.0, validate: validateDuration, onChange: () => trigger(),
                   })}
                 />
                 <div className="ui basic label">
                   { t('runForm.hourLabel') }
                 </div>
               </div>
-              <Transition visible={!!formState.errors.second} animation="scale" duration={500}>
-                <div className="ui pointing red basic label">
-                  {' '}
-                  { t('runForm.formError') }
-                  {' '}
-                </div>
-              </Transition>
             </Form.Field>
           </Form.Group>
         </Form.Field>
       </Form.Group>
-      <Transition visible={!durationValidity} animation="scale" duration={500}>
-        <div className="ui pointing red basic label">
-          {' '}
-          { t('runForm.durationError') }
-          {' '}
-        </div>
-      </Transition>
       <Form.Group widths="equal">
         <Form.Field>
           <label htmlFor="distance">
