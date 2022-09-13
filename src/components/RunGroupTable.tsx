@@ -14,6 +14,7 @@ import {
   RunLogContextInterface,
 } from '../App';
 import { RunPlan } from '../domain/RunPlan';
+import { UserTypes } from '../domain/RegisterUser';
 
 export enum GroupingIntervals {
   YEAR,
@@ -94,6 +95,8 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
         <>
           {isRun(groupable) && (
             <tr>
+              {runLogState.authState.userType === UserTypes.COACH
+              && <td>{groupable.name}</td> }
               <td>{groupable.date.toLocaleDateString()}</td>
               <td className="center aligned"><BiRun size="1.4em" style={{ color: '#6435c9' }} /></td>
               <td>
@@ -114,6 +117,8 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
           )}
           {isRunPlan(groupable) && (
           <tr>
+            {runLogState.authState.userType === UserTypes.COACH
+            && <td>{groupable.assignedTo}</td> }
             <td>{groupable.date.toLocaleDateString()}</td>
             <td className="center aligned"><AiOutlineCalendar size="1.4em" style={{ color: '#6435c9' }} /></td>
             <td>
@@ -131,6 +136,8 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
       <tr style={{ fontWeight: 'bold', color: '#6435c9 !important' }}>
         <td style={{ color: '#6435c9' }}>{t('runGroupTable.overview')}</td>
         <td />
+        {runLogState.authState.userType === UserTypes.COACH
+        && <td /> }
         <td />
         <td style={{ color: '#6435c9' }}>{`${formatPace(getTotalTime() / 60)}`}</td>
         <td style={{ color: '#6435c9' }}>{getDistanceInMeasurement(getTotalDistance())}</td>

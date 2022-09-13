@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import {
-  Container, Form, Loader, Segment,
+  Container, DropdownItemProps, Form, Loader, Segment,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { deleteRun, getRunPlans, getRuns } from '../Api';
+import {
+  deleteRun, getOwnRunners, getRunPlans, getRuns, getRunsOfCoachedAthletes,
+} from '../Api';
 import { RunGroup } from '../domain/RunGroup';
 import RunGroupTable, { GroupingIntervals } from './RunGroupTable';
 import { Run } from '../domain/Run';
@@ -21,30 +23,74 @@ const AllRunList: React.FC<AllRunListProps> = (props) => {
   const { t } = useTranslation();
   const { userToShow } = props;
   const [groupables, setGroupables] = useState<Array<Run | RunPlan>>([]);
-  const [isLoading, setIsLoading] = useState<boolean>();
+  const [selectableAthleteOptions, setSelectableAthleteOptions] = useState<DropdownItemProps[]>([]);
+  const [selectedAthlete, setSelectedAthlete] = useState<string>('');
+  const [isTableLoading, setIsTableLoading] = useState<boolean>();
+  const [areAthletesLoading, setAreAthletesLoading] = useState<boolean>();
+
+  const {
+    runLogState,
+    setRunLogState,
+  } = useContext<RunLogContextInterface>(RunLogContext);
 
   function loadGroupables() {
-    getRuns(userToShow).then((runResult) => {
-      const runs: Array<Run> = runResult;
-      getRunPlans(userToShow).then((runPlanResult) => {
-        const runPlans: Array<RunPlan> = runPlanResult;
-        setGroupables(groupables
-          .concat(runs, runPlans)
-          .sort((first, second) => first.date.getTime() - second.date.getTime()));
-        setIsLoading(false);
+    const athlete = runLogState.authState.userType
+    === UserTypes.COACH ? selectedAthlete : userToShow;
+    if (athlete === '') {
+      getRunsOfCoachedAthletes().then((runResult) => {
+        const runs: Array<Run> = runResult;
+        setGroupables(runs.sort((first, second) => first.date.getTime() - second.date.getTime()));
+        setIsTableLoading(false);
       });
+    } else {
+      getRuns(athlete).then((runResult) => {
+        const runs: Array<Run> = runResult;
+        getRunPlans(athlete).then((runPlanResult) => {
+          const runPlans: Array<RunPlan> = runPlanResult;
+          const newGroupables : (Run | RunPlan)[] = [];
+          setGroupables(newGroupables
+            .concat(runs, runPlans)
+            .sort((first, second) => first.date.getTime() - second.date.getTime()));
+          setIsTableLoading(false);
+        });
+      });
+    }
+  }
+
+  function loadSelectableAthleteOptions() {
+    getOwnRunners().then((runners) => {
+      setSelectableAthleteOptions(runners.map((runner, index) => ({
+        key: index,
+        text: runner,
+        value: runner,
+      })));
+      setAreAthletesLoading(false);
     });
   }
 
   useEffect(() => {
-    setIsLoading(true);
-    loadGroupables();
+    if (runLogState.authState.userType === UserTypes.ATHLETE) {
+      setIsTableLoading(true);
+      loadGroupables();
+    }
   }, []);
+
+  useEffect(() => {
+    setAreAthletesLoading(true);
+    loadSelectableAthleteOptions();
+  }, []);
+  useEffect(() => {
+    setIsTableLoading(true);
+    loadGroupables();
+  }, [selectedAthlete]);
   const deleteRunCallback = async (id: string) => {
-    setIsLoading(true);
+    setIsTableLoading(true);
     await deleteRun(id);
     loadGroupables();
-    setIsLoading(false);
+    setIsTableLoading(false);
+  };
+  const athleteSelectedCallback = async (athlete: string) => {
+    setSelectedAthlete(athlete);
   };
   const groupingIntervalOptions = [
     {
@@ -79,11 +125,6 @@ const AllRunList: React.FC<AllRunListProps> = (props) => {
     GroupingIntervals.MONTH,
   );
 
-  const {
-    runLogState,
-    setRunLogState,
-  } = useContext<RunLogContextInterface>(RunLogContext);
-
   function getRunGroups() {
     let keyFormatString: string;
     switch (selectedGrouping) {
@@ -100,6 +141,7 @@ const AllRunList: React.FC<AllRunListProps> = (props) => {
         break;
     }
     const runGroups: Map<string, RunGroup> = new Map<string, RunGroup>();
+    console.log(groupables);
     groupables.forEach((run) => {
       const currentKey = DateTime.fromJSDate(run.date).toFormat(keyFormatString);
       if (!runGroups.has(currentKey)) {
@@ -114,6 +156,22 @@ const AllRunList: React.FC<AllRunListProps> = (props) => {
       <Container>
         <Form>
           <Form.Group inline widths="equal">
+            {runLogState.authState.userType === UserTypes.COACH
+            && (
+            <Form.Dropdown
+              placeholder="None"
+              label={t('allRunList.selectedAthleteLabel')}
+              fluid
+              inline
+              selection
+              clearable
+              search
+              loading={areAthletesLoading}
+              options={selectableAthleteOptions}
+              value={selectedAthlete}
+              onChange={(event, data) => athleteSelectedCallback(data.value as string)}
+            />
+            )}
             <Form.Dropdown
               laceholder="None"
               label={t('allRunList.intervalLabel')}
@@ -142,11 +200,13 @@ const AllRunList: React.FC<AllRunListProps> = (props) => {
         </Form>
 
       </Container>
-      {isLoading ? <Segment placeholder><Loader active /></Segment>
+      {isTableLoading ? <Segment placeholder><Loader active /></Segment>
         : (
           <table className="ui celled table">
             <thead>
               <tr>
+                {runLogState.authState.userType === UserTypes.COACH
+                && <th>{t('allRunList.nameHeader')}</th> }
                 <th>{t('allRunList.dateHeader')}</th>
                 <th>{t('allRunList.typeHeader')}</th>
                 <th>{t('allRunList.titleHeader')}</th>

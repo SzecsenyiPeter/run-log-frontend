@@ -15,6 +15,9 @@ async function getRuns(runner: string | null) {
   }
   return (await axios.get(`runs?athlete=${runner}`)).data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
 }
+async function getRunsOfCoachedAthletes() {
+  return (await axios.get('runs/my-athletes')).data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
+}
 async function deleteRun(id: string) {
   await axios.delete(`runs/${id}`);
 }
@@ -71,4 +74,5 @@ export {
   addRunPlan,
   getOwnRunners,
   getRunPlans,
+  getRunsOfCoachedAthletes,
 };

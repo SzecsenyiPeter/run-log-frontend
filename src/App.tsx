@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Route, BrowserRouter as Router, Routes, NavLink, Navigate,
+  BrowserRouter as Router, Navigate, NavLink, Route, Routes,
 } from 'react-router-dom';
 import './App.css';
 import { Container, Header, Menu } from 'semantic-ui-react';
@@ -110,9 +110,11 @@ const App: React.FC = () => {
               <Menu.Item as="a">
                 <NavLink to="/add" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.addRun')}</NavLink>
               </Menu.Item>
+              {runLogState.authState.userType === UserTypes.COACH && (
               <Menu.Item as="a">
                 <NavLink to="/create-run-plan" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.createRunPlan')}</NavLink>
               </Menu.Item>
+              )}
             </>
             )}
             {!runLogState.authState.isLoggedIn

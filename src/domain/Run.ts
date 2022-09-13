@@ -2,6 +2,7 @@ export interface Run {
     id?: string;
     title: string;
     description?: string;
+    name?: string;
     durationInSeconds: number;
     distanceInMeters: number;
     heartRate: number;

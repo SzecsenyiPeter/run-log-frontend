@@ -27,6 +27,7 @@ type FormValues = {
   minute: number,
   second: number,
   distance: number,
+  heartRate: number,
   date: Date,
   distanceMeasurement: DistanceMeasurements
 }
@@ -41,6 +42,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
     minute: 1,
     second: 1,
     distance: 1,
+    heartRate: 150,
     date: new Date(),
     distanceMeasurement: DistanceMeasurements.KILOMETRES,
   };
@@ -79,7 +81,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
       durationInSeconds,
       distanceInMeters,
       date: data.date,
-      heartRate: 160,
+      heartRate: data.heartRate,
     };
     onSubmitCallback(run);
   };
@@ -191,6 +193,32 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           </div>
           { formState.errors.distance && (
           <Transition visible={!!formState.errors.distance} animation="scale" duration={500}>
+            <div className="ui pointing red basic label">
+              {' '}
+              { t('runForm.formError') }
+              {' '}
+            </div>
+          </Transition>
+          )}
+        </Form.Field>
+        <Form.Field>
+          <label htmlFor="heartRate">
+            { t('runForm.heartRateLabel') }
+          </label>
+          <div className="ui right labeled input">
+            <input
+              id="heartRate"
+              type="number"
+              {...register('heartRate', {
+                required: true, min: 0.0,
+              })}
+            />
+            <div className="ui basic label">
+              { t('runForm.heartRateUnit') }
+            </div>
+          </div>
+          { formState.errors.heartRate && (
+          <Transition visible={!!formState.errors.heartRate} animation="scale" duration={500}>
             <div className="ui pointing red basic label">
               {' '}
               { t('runForm.formError') }
