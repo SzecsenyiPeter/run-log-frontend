@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
           isLoggedIn: true,
         },
       });
-      navigate('/list');
+      navigate(-1);
       setIsSending(false);
     } catch (exception) {
       runLogState.triggerNotification(t('login.failed'), NotificationTypes.ERROR);

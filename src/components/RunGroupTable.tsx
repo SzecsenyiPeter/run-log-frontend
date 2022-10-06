@@ -45,6 +45,9 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
   const {
     runLogState,
   } = useContext<RunLogContextInterface>(RunLogContext);
+  function onRunClicked(id: string) {
+    navigate(`/run/${id}`);
+  }
   function getGroupDateFormatted() {
     const dateTime = DateTime.fromJSDate(date);
     switch (groupBy) {
@@ -94,7 +97,7 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
       {groupables.map((groupable) => (
         <>
           {isRun(groupable) && (
-            <tr>
+            <tr onClick={() => onRunClicked(groupable.id!)}>
               {runLogState.authState.userType === UserTypes.COACH
               && <td>{groupable.name}</td> }
               <td>{groupable.date.toLocaleDateString()}</td>

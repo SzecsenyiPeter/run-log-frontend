@@ -46,12 +46,14 @@ const CreateRunPlanPage: React.FC = () => {
   const [formState, setFormState] = useState({
     instructions: '',
     distance: 0,
+    heartRate: '',
+    paceMinutes: '',
+    paceSeconds: '',
     distanceMeasurement: DistanceMeasurements.KILOMETRES,
     assignedTo: [{ id: '', text: '' }],
   });
   const handleAddition = (tag : {id: string, text: string}) => {
     setFormState({ ...formState, assignedTo: formState.assignedTo.concat(tag) });
-    console.log(formState);
   };
 
   const handleDelete = (i: number) => {
@@ -63,10 +65,21 @@ const CreateRunPlanPage: React.FC = () => {
   const isFormInvalid = () => formState.distance <= 0 || !formState.instructions;
   const onCreateRunPlanClicked = async () => {
     const distanceInMeters = formState.distance
-        * formState.distanceMeasurement === DistanceMeasurements.KILOMETRES ? 1000 : 1614;
+        * (formState.distanceMeasurement === DistanceMeasurements.KILOMETRES ? 1000 : 1614);
+    const heartRate = formState.heartRate ? parseInt(formState.heartRate, 10) : undefined;
+    let duration;
+    if (formState.paceSeconds || formState.paceMinutes) {
+      const minuteInputInSeconds = formState.paceMinutes
+        ? parseInt(formState.paceMinutes, 10) * 60 : 0;
+      let seconds = formState.paceSeconds ? parseInt(formState.paceSeconds, 10) : 0;
+      seconds += minuteInputInSeconds;
+      duration = formState.distance * seconds;
+    }
     const createRunPlan: CreateRunPlan = {
       distance: distanceInMeters,
       instructions: formState.instructions,
+      heartRate,
+      duration,
       date: new Date(),
       assignedTo: formState.assignedTo.map((tag) => tag.text),
     };
@@ -85,7 +98,7 @@ const CreateRunPlanPage: React.FC = () => {
         { t('runPlanForm.header')}
         {' '}
       </Header>
-      <Form.Field>
+      <Form.Field required>
         <label htmlFor="instructions">
           { t('runPlanForm.instructions') }
         </label>
@@ -98,7 +111,7 @@ const CreateRunPlanPage: React.FC = () => {
           ) => setFormState({ ...formState, instructions: event.currentTarget.value })}
         />
       </Form.Field>
-      <Form.Field>
+      <Form.Field required style={{ maxWidth: '20em' }}>
         <label htmlFor="distance">
           { t('runPlanForm.distance') }
         </label>
@@ -126,6 +139,64 @@ const CreateRunPlanPage: React.FC = () => {
           />
         </div>
       </Form.Field>
+      <Form.Field style={{ maxWidth: '20em' }}>
+        <label htmlFor="heartRate">
+          { t('runForm.heartRateLabel') }
+        </label>
+        <div className="ui right labeled input">
+          <input
+            id="heartRate"
+            type="number"
+            value={formState.heartRate}
+            onChange={(
+              event,
+            ) => setFormState({ ...formState, heartRate: event.currentTarget.value })}
+          />
+          <div className="ui basic label">
+            { t('runForm.heartRateUnit') }
+          </div>
+        </div>
+      </Form.Field>
+
+      <Form.Group>
+        <Form.Field>
+          <label htmlFor="paceMinutes">
+            { t('runPlanForm.paceLabel') }
+          </label>
+          <Form.Group>
+            <Form.Field>
+              <div className="ui right labeled input">
+                <input
+                  id="paceMinutes"
+                  type="number"
+                  value={formState.paceMinutes}
+                  onChange={(
+                    event,
+                  ) => setFormState({ ...formState, paceMinutes: event.currentTarget.value })}
+                />
+                <div className="ui basic label">
+                  { t('runForm.minuteLabel') }
+                </div>
+              </div>
+            </Form.Field>
+            <Form.Field>
+              <div className="ui right labeled input">
+                <input
+                  id="paceSeconds"
+                  type="number"
+                  value={formState.paceSeconds}
+                  onChange={(
+                    event,
+                  ) => setFormState({ ...formState, paceSeconds: event.currentTarget.value })}
+                />
+                <div className="ui basic label">
+                  { t('runForm.secondLabel') }
+                </div>
+              </div>
+            </Form.Field>
+          </Form.Group>
+        </Form.Field>
+      </Form.Group>
       <Form.Field>
         <label htmlFor="assignedTo">
           { t('runPlanForm.assignedTo') }

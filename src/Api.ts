@@ -15,6 +15,12 @@ async function getRuns(runner: string | null) {
   }
   return (await axios.get(`runs?athlete=${runner}`)).data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
 }
+async function getRun(id: number) {
+  return (await axios.get<Run>(`/runs/${id}`)).data;
+}
+async function linkRunWithPlan(runId: number, runPlanId: number) {
+  await axios.post(`/runs/${runId}/link-plan/${runPlanId}`);
+}
 async function getRunsOfCoachedAthletes() {
   return (await axios.get('runs/my-athletes')).data.runs.map((run: any) => ({ ...run, date: new Date(run.date) }));
 }
@@ -48,9 +54,9 @@ async function addRunPlan(createRunPlan: CreateRunPlan) {
 
 async function getRunPlans(runner: string | null) {
   if (runner === null) {
-    return (await axios.get('run-plans')).data.map((runPlan: any) => ({ ...runPlan, date: new Date(runPlan.date) }));
+    return (await axios.get('/run-plans')).data.map((runPlan: any) => ({ ...runPlan, date: new Date(runPlan.date) }));
   }
-  return (await axios.get(`run-plans?athlete=${runner}`)).data.map((runPlan: any) => ({ ...runPlan, date: new Date(runPlan.date) }));
+  return (await axios.get(`/run-plans?athlete=${runner}`)).data.map((runPlan: any) => ({ ...runPlan, date: new Date(runPlan.date) }));
 }
 
 async function loginUser(user: LoginUser) : Promise<LoginResponse> {
@@ -65,6 +71,8 @@ async function loginUser(user: LoginUser) : Promise<LoginResponse> {
 export {
   addRun,
   getRuns,
+  getRun,
+  linkRunWithPlan,
   deleteRun,
   editRun,
   registerUser,

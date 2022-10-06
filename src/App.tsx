@@ -15,6 +15,7 @@ import { UserTypes } from './domain/RegisterUser';
 import RestrictedPage from './components/RestrictedPage';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateRunPlanPage from './components/CreateRunPlanPage';
+import RunPage from './components/RunPage';
 
 export enum DistanceMeasurements {
   KILOMETRES,
@@ -137,6 +138,7 @@ const App: React.FC = () => {
           <Routes>
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AddRunPage /></RestrictedPage>} path="/add" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><AllRunList userToShow={null} /></RestrictedPage>} path="/list" />
+            <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><RunPage /></RestrictedPage>} path="/run/:id" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><EditRunPage /></RestrictedPage>} path="/edit" />
             <Route element={<RestrictedPage shouldBeLoggedIn redirectTo="/login"><CreateRunPlanPage /></RestrictedPage>} path="/create-run-plan" />
             <Route element={<RestrictedPage shouldBeLoggedIn={false} redirectTo="/list"><RegisterPage /></RestrictedPage>} path="/register" />

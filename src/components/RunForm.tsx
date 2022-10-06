@@ -67,7 +67,9 @@ const RunForm: React.FC<RunFormProps> = (props) => {
   } = useForm<FormValues>({ mode: 'onChange', defaultValues });
 
   const addRunFromForm = (data : FormValues) => {
-    const durationInSeconds = data.hour * 3600 + data.minute * 60 + data.second;
+    const durationInSeconds = (parseInt(String(data.hour), 10) * 3600)
+        + (parseInt(String(data.minute), 10) * 60)
+        + parseInt(String(data.second), 10);
     let distanceInMeters = data.distance;
     if (data.distanceMeasurement === DistanceMeasurements.KILOMETRES) {
       distanceInMeters *= 1000;
@@ -154,7 +156,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                   })}
                 />
                 <div className="ui basic label">
-                  { t('runForm.hourLabel') }
+                  { t('runForm.secondLabel') }
                 </div>
               </div>
             </Form.Field>
