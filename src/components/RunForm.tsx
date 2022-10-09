@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-  Button, Dropdown, Form, Header, Transition,
+  Button, Dropdown, Form, Grid, Header, Transition,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
+import { useFilePicker } from 'use-file-picker';
 import { Run } from '../domain/Run';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { DistanceMeasurements } from '../App';
+import { convertTcx } from '../utils/ConvertTcx';
 
 interface SubmitCallback {
   (run : Run) : void;
@@ -63,7 +65,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
   const { buttonTitle, onSubmitCallback, isSubmitButtonLoading } = props;
 
   const {
-    register, control, handleSubmit, formState, getValues, trigger,
+    register, control, handleSubmit, formState, getValues, trigger, setValue,
   } = useForm<FormValues>({ mode: 'onChange', defaultValues });
 
   const addRunFromForm = (data : FormValues) => {
@@ -87,7 +89,22 @@ const RunForm: React.FC<RunFormProps> = (props) => {
     };
     onSubmitCallback(run);
   };
-
+  const [openFileSelector, { filesContent }] = useFilePicker({
+    accept: '.tcx',
+  });
+  useEffect(() => {
+    if (filesContent.length > 0) {
+      const result = convertTcx(filesContent[0].content);
+      setValue('heartRate', Math.round(result.heartRate));
+      setValue(
+        'distance',
+        +(getValues('distanceMeasurement') === DistanceMeasurements.MILES ? result.distance / 1609 : result.distance / 1000).toFixed(2),
+      );
+      setValue('hour', Math.floor(result.duration / 3600));
+      setValue('minute', Math.floor((result.duration % 3600) / 60));
+      setValue('second', Math.floor(result.duration % 3600 % 60));
+    }
+  }, [filesContent]);
   const validateDuration = () => Number(getValues('hour')) + Number(getValues('minute')) + Number(getValues('second')) > 0;
 
   return (
@@ -172,6 +189,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
             <input
               id="distance"
               type="number"
+              step="0.01"
               placeholder="Distance"
               {...register('distance', {
                 required: true, min: 0.0,
@@ -256,7 +274,15 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           </Transition>
         </Form.Field>
       </Form.Group>
-      <Button type="submit" color="violet" disabled={!formState.isValid || isSubmitButtonLoading} loading={isSubmitButtonLoading}>{buttonTitle}</Button>
+      <Grid>
+        <Grid.Column floated="left" width={5}>
+          <Button type="button" color="green" onClick={() => (openFileSelector())}>{t('runForm.uploadFile')}</Button>
+        </Grid.Column>
+        <Grid.Column floated="right" width={2}>
+          <Button type="submit" color="violet" disabled={!formState.isValid || isSubmitButtonLoading} loading={isSubmitButtonLoading}>{buttonTitle}</Button>
+        </Grid.Column>
+      </Grid>
+
     </Form>
   );
 };

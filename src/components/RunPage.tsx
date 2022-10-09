@@ -117,16 +117,17 @@ const RunPage: React.FC = () => {
                 {' at '}
                 {run?.date !== undefined ? new Date(run?.date).toLocaleDateString() : ''}
               </p>
-              <Header as="h3">Description</Header>
+              <Header as="h3">{t('runPage.description')}</Header>
               <p>{run?.description}</p>
             </Grid.Column>
             <Grid.Column>
-              <Header as="h2" style={{ marginBottom: '5px' }}>Statistics</Header>
+              <Header as="h2" style={{ marginBottom: '5px' }}>{t('runPage.stats')}</Header>
               {isLinkedWithRunPlan()
               && (
               <Header as="h3" style={{ marginTop: '5px' }}>
-                Actual/
-                <span style={{ color: '#6435c9' }}>Described</span>
+                {t('runPage.actual')}
+                /
+                <span style={{ color: '#6435c9' }}>{t('runPage.described')}</span>
               </Header>
               )}
               <List divided relaxed size="large">
@@ -140,7 +141,7 @@ const RunPage: React.FC = () => {
                           <span style={{ color: '#6435c9' }}>{getDistanceInMeasurement(run?.completedRunPlan?.distance)}</span>
                         </List.Header>
                         <List.Description>
-                          Difference:
+                          {t('runPage.difference')}
                           {' '}
                           <span
                             style={{ color: comparison.distanceComparison.color }}
@@ -154,7 +155,7 @@ const RunPage: React.FC = () => {
                         <List.Header>
                           {getDistanceInMeasurement(run?.distanceInMeters)}
                         </List.Header>
-                        <List.Description>Distance</List.Description>
+                        <List.Description>{t('runPage.distance')}</List.Description>
                       </>
                     ) }
                   </List.Content>
@@ -169,7 +170,7 @@ const RunPage: React.FC = () => {
                           <span style={{ color: '#6435c9' }}>{formatPace(run?.completedRunPlan.duration / 60)}</span>
                         </List.Header>
                         <List.Description>
-                          Difference:
+                          {t('runPage.difference')}
                           {' '}
                           <span
                             style={{ color: comparison.durationComparison.color }}
@@ -183,7 +184,7 @@ const RunPage: React.FC = () => {
                         <List.Header>
                           {formatPace(run?.durationInSeconds / 60)}
                         </List.Header>
-                        <List.Description>Distance</List.Description>
+                        <List.Description>{t('runPage.duration')}</List.Description>
                       </>
                     ) }
                   </List.Content>
@@ -198,7 +199,7 @@ const RunPage: React.FC = () => {
                           <span style={{ color: '#6435c9' }}>{getPaceInMeasurement(run?.completedRunPlan.duration / run?.completedRunPlan.distance)}</span>
                         </List.Header>
                         <List.Description>
-                          Difference:
+                          {t('runPage.difference')}
                           {' '}
                           <span
                             style={{ color: comparison.paceComparison.color }}
@@ -212,7 +213,7 @@ const RunPage: React.FC = () => {
                         <List.Header>
                           {getPaceInMeasurement(run?.durationInSeconds / run?.distanceInMeters)}
                         </List.Header>
-                        <List.Description>Distance</List.Description>
+                        <List.Description>{t('runPage.pace')}</List.Description>
                       </>
                     ) }
                   </List.Content>
@@ -227,7 +228,7 @@ const RunPage: React.FC = () => {
                           <span style={{ color: '#6435c9' }}>{`${run?.completedRunPlan?.heartRate} ${t('runForm.heartRateUnit')}`}</span>
                         </List.Header>
                         <List.Description>
-                          Difference:
+                          {t('runPage.difference')}
                           {' '}
                           <span
                             style={{ color: comparison.heartRateComparison.color }}
@@ -241,7 +242,7 @@ const RunPage: React.FC = () => {
                         <List.Header>
                           {run?.heartRate}
                         </List.Header>
-                        <List.Description>Distance</List.Description>
+                        <List.Description>{t('runPage.heartRate')}</List.Description>
                       </>
                     ) }
                   </List.Content>

@@ -62,9 +62,9 @@ const LinkRunWithPlanModal: React.FC<LinkRunWithPlanProps> = (props) => {
       onOpen={() => setOpen(true)}
       dimmer="blurring"
       open={open}
-      trigger={<Button color="violet">{t('linkRun.open')}</Button>}
+      trigger={<Button color="violet">{t('setCoach.open')}</Button>}
     >
-      <Modal.Header>{t('linkRun.title')}</Modal.Header>
+      <Modal.Header>{t('runPage.link')}</Modal.Header>
       <Modal.Content content>
 
         <Input
@@ -74,7 +74,7 @@ const LinkRunWithPlanModal: React.FC<LinkRunWithPlanProps> = (props) => {
           value={selectedRunPlan}
           onChange={(event) => onInputChanged(event.currentTarget.value)}
           iconPosition="left"
-          placeholder={t('linkRun.placeholder')}
+          placeholder={t('runPage.linkPlaceholder')}
         />
         <datalist id="runPlans">
           {runPlans.map((runPlan) => (
@@ -88,10 +88,10 @@ const LinkRunWithPlanModal: React.FC<LinkRunWithPlanProps> = (props) => {
       </Modal.Content>
       <Modal.Actions>
         <Button color="black" onClick={() => setOpen(false)}>
-          {t('linkRun.cancel')}
+          {t('setCoach.cancel')}
         </Button>
         <Button
-          content={t('linkRun.add')}
+          content={t('runPage.linkAdd')}
           labelPosition="right"
           icon="add"
           color="violet"
