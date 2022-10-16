@@ -45,7 +45,7 @@ function AddCoachedAthleteModal() {
       onOpen={() => setOpen(true)}
       dimmer="blurring"
       open={open}
-      trigger={<Button color="violet">{t('setCoach.open')}</Button>}
+      trigger={<Button data-testid="add-athlete-open" color="violet">{t('setCoach.open')}</Button>}
     >
       <Modal.Header>{t('setCoach.title')}</Modal.Header>
       <Modal.Content content>
@@ -53,6 +53,7 @@ function AddCoachedAthleteModal() {
         <Input
           icon="users"
           list="athletes"
+          data-testid="add-athlete-input"
           loading={athletesLoading}
           value={selectedAthlete}
           onChange={(event) => setSelectedAthlete(event.currentTarget.value)}
@@ -71,6 +72,7 @@ function AddCoachedAthleteModal() {
         </Button>
         <Button
           content={t('setCoach.add')}
+          data-testid="add-athlete-confirm"
           labelPosition="right"
           icon="add"
           color="violet"

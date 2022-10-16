@@ -51,8 +51,11 @@ const LinkRunWithPlanModal: React.FC<LinkRunWithPlanProps> = (props) => {
   const isAddButtonDisabled = () => !runPlans
     .some((runPlan) => runPlan.instructions === selectedRunPlan);
   useEffect(() => {
-    getRunPlans(null).then((result) => {
+    getRunPlans(null).then((result : Array<RunPlan>) => {
       setRunPlans(result);
+      if (result && result.length > 0 && result[0].instructions) {
+        setSelectedRunPlan(result[0].instructions);
+      }
       setRunPlansLoading(false);
     });
   }, []);
@@ -62,7 +65,7 @@ const LinkRunWithPlanModal: React.FC<LinkRunWithPlanProps> = (props) => {
       onOpen={() => setOpen(true)}
       dimmer="blurring"
       open={open}
-      trigger={<Button color="violet">{t('setCoach.open')}</Button>}
+      trigger={<Button data-testid="link-plan-open" color="violet">{t('runPage.link')}</Button>}
     >
       <Modal.Header>{t('runPage.link')}</Modal.Header>
       <Modal.Content content>
@@ -92,6 +95,7 @@ const LinkRunWithPlanModal: React.FC<LinkRunWithPlanProps> = (props) => {
         </Button>
         <Button
           content={t('runPage.linkAdd')}
+          data-testid="link-plan-confirm"
           labelPosition="right"
           icon="add"
           color="violet"

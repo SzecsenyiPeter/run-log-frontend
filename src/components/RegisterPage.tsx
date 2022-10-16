@@ -52,20 +52,22 @@ const RegisterPage: React.FC = () => {
         <Form>
           <Form.Field>
             <label>{t('register.username')}</label>
-            <input value={username} onChange={(event) => setUsername(event.currentTarget.value)} />
+            <input value={username} data-testid="register-username" onChange={(event) => setUsername(event.currentTarget.value)} />
           </Form.Field>
           <Form.Field>
             <label>{t('register.password')}</label>
-            <input type="password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} />
+            <input type="password" value={password} data-testid="register-password" onChange={(event) => setPassword(event.currentTarget.value)} />
           </Form.Field>
           <Form.Dropdown
             label={t('register.userTypeLabel')}
             selection
+            data-testid="register-type"
+            search
             value={selectedUserType}
             onChange={(event, data) => setSelectedUserType(data.value as UserTypes)}
             options={UserTypeOptions}
           />
-          <Button type="submit" color="violet" disabled={!username || !password || isSending} onClick={registerUserFromForm}>{t('register.submit')}</Button>
+          <Button type="submit" color="violet" data-testid="register-submit" disabled={!username || !password || isSending} onClick={registerUserFromForm}>{t('register.submit')}</Button>
         </Form>
       </Container>
     </div>

@@ -104,6 +104,7 @@ const CreateRunPlanPage: React.FC = () => {
         </label>
         <textarea
           id="instructions"
+          data-testid="run-plan-instructions"
           placeholder={t('runPlanForm.instructionsPlaceholder')}
           value={formState.instructions}
           onChange={(
@@ -118,6 +119,7 @@ const CreateRunPlanPage: React.FC = () => {
         <div className="ui right labeled input">
           <input
             id="distance"
+            data-testid="run-plan-distance"
             type="number"
             value={formState.distance}
             onChange={(
@@ -146,6 +148,7 @@ const CreateRunPlanPage: React.FC = () => {
         <div className="ui right labeled input">
           <input
             id="heartRate"
+            data-testid="run-plan-heartrate"
             type="number"
             value={formState.heartRate}
             onChange={(
@@ -168,6 +171,7 @@ const CreateRunPlanPage: React.FC = () => {
               <div className="ui right labeled input">
                 <input
                   id="paceMinutes"
+                  data-testid="run-plan-minutes"
                   type="number"
                   value={formState.paceMinutes}
                   onChange={(
@@ -184,6 +188,7 @@ const CreateRunPlanPage: React.FC = () => {
                 <input
                   id="paceSeconds"
                   type="number"
+                  data-testid="run-plan-seconds"
                   value={formState.paceSeconds}
                   onChange={(
                     event,
@@ -204,6 +209,7 @@ const CreateRunPlanPage: React.FC = () => {
         <ReactTags
           handleAddition={handleAddition}
           handleDelete={handleDelete}
+          data-testid="run-plan-to"
           tags={formState.assignedTo}
           placeholder=""
           suggestions={athletes}
@@ -213,7 +219,7 @@ const CreateRunPlanPage: React.FC = () => {
           minQueryLength={0}
         />
       </Form.Field>
-      <Button type="submit" color="violet" onClick={onCreateRunPlanClicked} loading={isLoading} disabled={isFormInvalid()} content={t('runPlanForm.submit')} />
+      <Button type="submit" data-testid="run-plan-submit" color="violet" onClick={onCreateRunPlanClicked} loading={isLoading} disabled={isFormInvalid()} content={t('runPlanForm.submit')} />
     </Form>
   );
 };

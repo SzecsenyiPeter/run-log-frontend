@@ -63,6 +63,7 @@ const resources = {
       runPage: {
         description: 'Description',
         stats: 'Statistics',
+        open: 'Link with run plan',
         actual: 'Actual',
         described: 'Described',
         difference: 'Difference:',
@@ -96,6 +97,7 @@ const resources = {
       },
       runPlanForm: {
         header: 'Create run plan',
+        paceLabel: 'Pace',
         instructions: 'Instructions:',
         instructionsPlaceholder: 'Tell the athlete what to do',
         distance: 'Distance:',
@@ -195,6 +197,7 @@ const resources = {
       runPlanForm: {
         header: 'Futás terv létrehozása',
         instructions: 'Instrukciók:',
+        paceLabel: 'Tempó:',
         instructionsPlaceholder: 'Mit csináljon a futó...',
         distance: 'Táv:',
         assignedTo: 'Melyik futónak legyen elküldve?',

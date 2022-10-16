@@ -106,14 +106,14 @@ const App: React.FC = () => {
             && (
             <>
               <Menu.Item as="a">
-                <NavLink to="/list" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.allRuns')}</NavLink>
+                <NavLink to="/list" data-testid="menu-list" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.allRuns')}</NavLink>
               </Menu.Item>
               <Menu.Item as="a">
-                <NavLink to="/add" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.addRun')}</NavLink>
+                <NavLink to="/add" data-testid="menu-add" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.addRun')}</NavLink>
               </Menu.Item>
               {runLogState.authState.userType === UserTypes.COACH && (
               <Menu.Item as="a">
-                <NavLink to="/create-run-plan" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.createRunPlan')}</NavLink>
+                <NavLink to="/create-run-plan" data-testid="menu-create-run-plan" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.createRunPlan')}</NavLink>
               </Menu.Item>
               )}
             </>
@@ -122,10 +122,10 @@ const App: React.FC = () => {
             && (
             <>
               <Menu.Item as="a">
-                <NavLink to="/register" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.register')}</NavLink>
+                <NavLink to="/register" data-testid="menu-register" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.register')}</NavLink>
               </Menu.Item>
               <Menu.Item as="a">
-                <NavLink to="/login" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.login')}</NavLink>
+                <NavLink to="/login" data-testid="menu-login" style={({ isActive }) => ({ color: isActive ? 'grey' : 'inherit' })}>{t('menu.login')}</NavLink>
               </Menu.Item>
             </>
             )}

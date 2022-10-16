@@ -114,13 +114,13 @@ const RunForm: React.FC<RunFormProps> = (props) => {
         <label htmlFor="title">
           { t('runForm.titleLabel') }
         </label>
-        <input id="title" placeholder={t('runForm.titleDescription')} {...register('title')} />
+        <input id="title" data-testid="run-form-title" placeholder={t('runForm.titleDescription')} {...register('title')} />
       </Form.Field>
       <Form.Field>
         <label htmlFor="description">
           { t('runForm.descriptionLabel') }
         </label>
-        <textarea id="description" placeholder={t('runForm.descriptionDescription')} {...register('description')} />
+        <textarea id="description" data-testid="run-form-description" placeholder={t('runForm.descriptionDescription')} {...register('description')} />
       </Form.Field>
       <Form.Group widths="equal">
         <Form.Field>
@@ -133,6 +133,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
                 <input
                   id="duration"
                   type="number"
+                  data-testid="run-form-hour"
                   {...register('hour', {
                     required: true, min: 0.0, validate: validateDuration, onChange: () => trigger(),
                   })}
@@ -153,6 +154,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
               <div className="ui right labeled input">
                 <input
                   id="duration"
+                  data-testid="run-form-minute"
                   type="number"
                   {...register('minute', {
                     required: true, min: 0.0, validate: validateDuration, onChange: () => trigger(),
@@ -167,6 +169,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
               <div className="ui right labeled input">
                 <input
                   id="duration"
+                  data-testid="run-form-second"
                   type="number"
                   {...register('second', {
                     required: true, min: 0.0, validate: validateDuration, onChange: () => trigger(),
@@ -188,6 +191,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           <div className="ui right labeled input">
             <input
               id="distance"
+              data-testid="run-form-distance"
               type="number"
               step="0.01"
               placeholder="Distance"
@@ -228,6 +232,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           <div className="ui right labeled input">
             <input
               id="heartRate"
+              data-testid="run-form-heartrate"
               type="number"
               {...register('heartRate', {
                 required: true, min: 0.0,
@@ -279,7 +284,7 @@ const RunForm: React.FC<RunFormProps> = (props) => {
           <Button type="button" color="green" onClick={() => (openFileSelector())}>{t('runForm.uploadFile')}</Button>
         </Grid.Column>
         <Grid.Column floated="right" width={2}>
-          <Button type="submit" color="violet" disabled={!formState.isValid || isSubmitButtonLoading} loading={isSubmitButtonLoading}>{buttonTitle}</Button>
+          <Button type="submit" data-testid="run-form-submit" color="violet" disabled={!formState.isValid || isSubmitButtonLoading} loading={isSubmitButtonLoading}>{buttonTitle}</Button>
         </Grid.Column>
       </Grid>
 

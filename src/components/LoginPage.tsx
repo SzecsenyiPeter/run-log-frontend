@@ -51,13 +51,13 @@ const LoginPage: React.FC = () => {
         <Form>
           <Form.Field>
             <label>{t('register.username')}</label>
-            <input value={username} onChange={(event) => setUsername(event.currentTarget.value)} />
+            <input value={username} data-testid="login-username" onChange={(event) => setUsername(event.currentTarget.value)} />
           </Form.Field>
           <Form.Field>
             <label>{t('register.password')}</label>
-            <input type="password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} />
+            <input type="password" data-testid="login-password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} />
           </Form.Field>
-          <Button type="submit" color="violet" disabled={!username || !password || isSending} onClick={loginUserFromForm}>{t('login.submit')}</Button>
+          <Button type="submit" data-testid="login-submit" color="violet" disabled={!username || !password || isSending} onClick={loginUserFromForm}>{t('login.submit')}</Button>
         </Form>
       </Container>
     </div>

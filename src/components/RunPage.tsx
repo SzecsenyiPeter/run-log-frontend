@@ -65,7 +65,7 @@ const RunPage: React.FC = () => {
     let distanceComparison = null;
     let durationComparison = null;
     let paceComparison = null;
-    if (run !== undefined && run.completedRunPlan !== undefined) {
+    if (run !== undefined && run.completedRunPlan !== null) {
       if (run.completedRunPlan.heartRate !== undefined) {
         const difference = run.heartRate - run.completedRunPlan.heartRate;
         const ratio = run.completedRunPlan.heartRate / run.heartRate;

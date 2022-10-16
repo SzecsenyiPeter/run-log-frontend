@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import { MdDelete, MdEditNote } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { AiOutlineCalendar, BiRun } from 'react-icons/all';
+import { AiOutlineCalendar, BiRun, CgDanger } from 'react-icons/all';
 import { calculatePaceInUnit, PaceUnit, Run } from '../domain/Run';
 import formatPace from '../utils/PaceDisplay';
 import { RunGroup } from '../domain/RunGroup';
@@ -32,7 +32,7 @@ interface RunGroupTableProps {
   onDeleteClicked: OnRunClicked;
 }
 function isRun(groupable: Run | RunPlan): groupable is Run {
-  return (groupable as Run).heartRate !== undefined;
+  return (groupable as Run).distanceInMeters !== undefined;
 }
 function isRunPlan(groupable: Run | RunPlan): groupable is RunPlan {
   return (groupable as RunPlan).instructions !== undefined;
@@ -91,6 +91,22 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
       .filter<Run>(isRun)
       .reduce<number>((sum, run) => sum + run.durationInSeconds, 0);
   }
+
+  function shouldShowDurationAlert(run: Run) {
+    if (run.completedRunPlan && run.completedRunPlan.duration) {
+      const ratio = run.completedRunPlan.duration / run.durationInSeconds;
+      return ratio > 1.03 || ratio < 0.97;
+    }
+    return false;
+  }
+
+  function shouldShowDistanceAlert(run: Run) {
+    if (run.completedRunPlan) {
+      const ratio = run.completedRunPlan.distance / run.distanceInMeters;
+      return ratio > 1.03 || ratio < 0.97;
+    }
+    return false;
+  }
   return (
     <>
       <tr className="active center aligned"><td colSpan={7} style={{ fontWeight: 'bold' }}>{getGroupDateFormatted()}</td></tr>
@@ -105,8 +121,26 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
               <td>
                 {groupable.title}
               </td>
-              <td>{`${formatPace(groupable.durationInSeconds / 60)}`}</td>
-              <td>{getDistanceInMeasurement(groupable.distanceInMeters)}</td>
+              {shouldShowDurationAlert(groupable) ? (
+                <td style={{ color: '#B03060' }}>
+                  {' '}
+                  <CgDanger color="#B03060" size="1.3em" />
+                  {' '}
+                  {`${formatPace(groupable.durationInSeconds / 60)}`}
+                </td>
+              ) : (
+                <td>{`${formatPace(groupable.durationInSeconds / 60)}`}</td>
+              )}
+              {shouldShowDistanceAlert(groupable) ? (
+                <td style={{ color: '#B03060' }}>
+                  {' '}
+                  <CgDanger color="#B03060" size="1.3em" />
+                  {' '}
+                  {getDistanceInMeasurement(groupable.distanceInMeters)}
+                </td>
+              ) : (
+                <td>{getDistanceInMeasurement(groupable.distanceInMeters)}</td>
+              )}
               <td>
                 {
                   getPaceInMeasurement(groupable.durationInSeconds, groupable.distanceInMeters)
