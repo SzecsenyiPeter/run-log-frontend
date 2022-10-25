@@ -161,9 +161,13 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
             <td>
               {groupable.instructions}
             </td>
-            <td />
+            <td>{`${groupable.duration ? formatPace(groupable.duration / 60) : ''}`}</td>
             <td>{groupable.distance !== undefined ? getDistanceInMeasurement(groupable.distance) : ''}</td>
-            <td />
+            <td>
+              {
+                groupable.duration ? getPaceInMeasurement(groupable.duration, groupable.distance) : ''
+              }
+            </td>
             <td />
           </tr>
           )}
@@ -178,7 +182,7 @@ const RunGroupTable: React.FC<RunGroupTableProps> = (props) => {
         <td />
         <td style={{ color: '#6435c9' }}>{`${formatPace(getTotalTime() / 60)}`}</td>
         <td style={{ color: '#6435c9' }}>{getDistanceInMeasurement(getTotalDistance())}</td>
-        <td style={{ color: '#6435c9' }}>{getPaceInMeasurement(getTotalTime(), getTotalDistance())}</td>
+        <td style={{ color: '#6435c9' }}>{getTotalDistance() > 0 ? getPaceInMeasurement(getTotalTime(), getTotalDistance()) : ''}</td>
         <td />
       </tr>
     </>
